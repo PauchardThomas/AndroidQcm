@@ -33,9 +33,9 @@ public class ProposalSqlLiteAdapter {
     }
 
     public static String getSchema() {
-        return "CREATE TABLE" + TABLE_PROPOSAL + "(" + COL_ID + "INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COL_LIBELLE + "TEXT NOT NULL,"+COL_IS_ANSWER+"BOOLEAN NOT NULL,"+
-                COL_QUESTION_ID+"int DEFAULT NOT NULL,FOREIGN KEY (`"+COL_QUESTION_ID+"`) REFERENCES `question` (`_id`));";
+        return "CREATE TABLE " + TABLE_PROPOSAL + "(" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COL_LIBELLE + " TEXT NOT NULL,"+COL_IS_ANSWER+" BOOLEAN NOT NULL,"+
+                COL_QUESTION_ID+" int  NOT NULL,FOREIGN KEY (`"+COL_QUESTION_ID+"`) REFERENCES `question` (`_id`));";
     }
 
     public void open() {this.db = this.helper.getWritableDatabase();}
@@ -105,7 +105,7 @@ public class ProposalSqlLiteAdapter {
 
     public static Proposal cursorToItem(Cursor c) {
 
-        Proposal proposal = new Proposal(0,null,false,null);
+        Proposal proposal = new Proposal(0,null,false,null,0);
         proposal.setId(c.getInt(c.getColumnIndex(COL_ID)));
         proposal.setLibelle(c.getString(c.getColumnIndex(COL_LIBELLE)));
 

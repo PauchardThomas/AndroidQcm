@@ -1,5 +1,6 @@
 package com.iia.cdsm.qcm.Entity;
 
+import java.sql.Time;
 import java.util.Date;
 
 /**
@@ -11,9 +12,19 @@ public class Qcm {
     protected String libelle;
     protected Date datePubli;
     protected Date dateFin;
+    protected Date duration;
     protected int nbPoints;
     protected Category category;
+    protected int idServer;
+    public static final String SERIAL = "QCM";
 
+    public Date getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Date duration) {
+        duration = duration;
+    }
 
     public String getLibelle() {
         return libelle;
@@ -63,13 +74,30 @@ public class Qcm {
         this.category = category;
     }
 
+    public int getIdServer() {
+        return idServer;
+    }
+
+    public void setIdServer(int idServer) {
+        this.idServer = idServer;
+    }
+
+    public String toString(){
+        return this.getLibelle();
+    }
+    public Qcm() {
+
+    }
+
     public Qcm(int id, String libelle, Date datePubli, Category category,
-               int nbPoints, Date dateFin) {
+               int nbPoints, Date dateFin,int idServer,Date duration) {
         this.id = id;
         this.libelle = libelle;
         this.datePubli = datePubli;
         this.category = category;
         this.nbPoints = nbPoints;
         this.dateFin = dateFin;
+        this.idServer = idServer;
+        this.duration = duration;
     }
 }

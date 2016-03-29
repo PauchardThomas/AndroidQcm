@@ -16,6 +16,7 @@ public class UserSqlLiteAdapter {
     public static final String COL_ID = "_id";
     public static final String COL_USERNAME ="username";
     public static final String COL_PASSWORD = "password";
+    public static final String COL_ID_SERVER ="id_server";
     private SQLiteDatabase db;
     private iiaSqlLiteOpenHelper helper;
 
@@ -24,8 +25,8 @@ public class UserSqlLiteAdapter {
     }
 
     public static String getSchema() {
-        return "CREATE TABLE" + TABLE_USER + "(" + COL_ID + "INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COL_USERNAME + "TEXT NOT NULL," + COL_PASSWORD + "TEXT NOT NULL);";
+        return "CREATE TABLE " + TABLE_USER + "(" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COL_USERNAME + " TEXT NOT NULL," + COL_PASSWORD + " TEXT NOT NULL,"+COL_ID_SERVER +" int NOT NULL);";
     }
 
     public void open() {this.db = this.helper.getWritableDatabase();}
@@ -35,8 +36,10 @@ public class UserSqlLiteAdapter {
     public long insert(User user) {
 
         ContentValues values = this.userToContentValues(user);
-        return db.insert(TABLE_USER,null,values);
+        long test =  db.insert(TABLE_USER,null,values);
+        return test;
     }
+
 
     public long delete(int id) {
 
@@ -56,8 +59,8 @@ public class UserSqlLiteAdapter {
 
 
     public User getUser(int id) {
-        String[] cols = {COL_ID,COL_USERNAME,COL_PASSWORD};
-        String whereClauses = COL_ID + "= ?";
+        String[] cols = {COL_ID,COL_USERNAME,COL_PASSWORD,COL_ID_SERVER};
+        String whereClauses = COL_ID_SERVER + "= ?";
         String[] whereArgs = {String.valueOf(id)};
         Cursor c = db.query(TABLE_USER,cols,whereClauses,whereArgs,null,null,null);
         User user = null;
@@ -73,10 +76,11 @@ public class UserSqlLiteAdapter {
 
     public static User cursorToItem(Cursor c) {
 
-        User user = new User(0,null,null);
+        User user = new User(null,null,0);
         user.setId(c.getInt(c.getColumnIndex(COL_ID)));
         user.setUsername(c.getString(c.getColumnIndex(COL_USERNAME)));
         user.setPassword(c.getString(c.getColumnIndex(COL_PASSWORD)));
+        user.setIdServer(c.getInt(c.getColumnIndex(COL_ID_SERVER)));
         return user;
     }
 
@@ -84,6 +88,7 @@ public class UserSqlLiteAdapter {
         ContentValues values = new ContentValues();
         values.put(COL_USERNAME,user.getUsername());
         values.put(COL_PASSWORD,user.getPassword());
+        values.put(COL_ID_SERVER,user.getIdServer());
         return values;
 
     }

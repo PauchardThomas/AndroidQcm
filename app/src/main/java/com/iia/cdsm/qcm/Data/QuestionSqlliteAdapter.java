@@ -31,10 +31,10 @@ public class QuestionSqlliteAdapter {
     }
 
     public static String getSchema() {
-        return "CREATE TABLE" + TABLE_QUESTION + "(" + COL_ID + "INTEGER PRIMARY KEY AUTOINCREMENT,"
-                +COL_LIBELLE + "TEXT NOT NULL,"+COL_POINTS+"int NOT NULL,"
+        return "CREATE TABLE " + TABLE_QUESTION + "(" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                +COL_LIBELLE + " TEXT NOT NULL,"+COL_POINTS+" int NOT NULL,"
                 +COL_QCM_ID
-                +"int DEFAULT NOT NULL,FOREIGN KEY (`"+COL_QCM_ID+"`) REFERENCES `qcm` (`_id`));";
+                +" int  NOT NULL,FOREIGN KEY (`"+COL_QCM_ID+"`) REFERENCES `qcm` (`_id`));";
     }
 
     public void open() {this.db = this.helper.getWritableDatabase();}
@@ -104,7 +104,7 @@ public class QuestionSqlliteAdapter {
 
     public static Question cursorToItem(Cursor c) {
 
-        Question question = new Question(0,null,0,null);
+        Question question = new Question(0,null,0,null,0);
         question.setId(c.getInt(c.getColumnIndex(COL_ID)));
         question.setLibelle(c.getString(c.getColumnIndex(COL_LIBELLE)));
         question.setPoints(c.getInt(c.getColumnIndex(COL_POINTS)));

@@ -5,6 +5,8 @@ import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.iia.cdsm.qcm.Entity.Proposal;
+
 /**
  * Created by Thom' on 13/02/2016.
  */
@@ -23,6 +25,12 @@ public class iiaSqlLiteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
+        db.execSQL(CategorySqlLiteAdapter.getSchema());
+        db.execSQL(QcmSqlLiteAdapter.getSchema());
+        db.execSQL(QuestionSqlliteAdapter.getSchema());
+        db.execSQL(ProposalSqlLiteAdapter.getSchema());
+        db.execSQL(UserSqlLiteAdapter.getSchema());
+        db.execSQL(AccessUserCategorySqLiteAdapter.getSchema());
     }
 
     @Override

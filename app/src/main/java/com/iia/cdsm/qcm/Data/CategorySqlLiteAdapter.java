@@ -13,10 +13,11 @@ import java.util.ArrayList;
 /**
  * Created by Thom' on 13/02/2016.
  */
-public class CategorySqlLiteAdapter {
+public  class CategorySqlLiteAdapter {
     public static final String TABLE_CATEGORY ="category";
     public static final String COL_ID ="_id";
     public static final String COL_LIBELLE ="libelle";
+    private static final String COL_ID_SERVER ="idServer";
     private SQLiteDatabase db;
     private SQLiteOpenHelper helper;
 
@@ -25,8 +26,8 @@ public class CategorySqlLiteAdapter {
     }
 
     public static String getSchema() {
-        return "CREATE TABLE" + TABLE_CATEGORY + "(" + COL_ID + "INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COL_LIBELLE + "TEXT NOT NULL);";
+        return "CREATE TABLE " + TABLE_CATEGORY + "(" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COL_LIBELLE + " TEXT NOT NULL,"+COL_ID_SERVER+" int not null);";
     }
 
     public void open() {this.db = this.helper.getWritableDatabase();}
@@ -35,7 +36,7 @@ public class CategorySqlLiteAdapter {
 
     public long insert(Category category) {
 
-        ContentValues values = this.userToContentValues(category);
+        ContentValues values = this.categoryToContentValues(category);
         return db.insert(TABLE_CATEGORY, null, values);
     }
 
@@ -50,21 +51,22 @@ public class CategorySqlLiteAdapter {
 
         String whereClauseUpdate = COL_ID + "= ?";
         String[] whereArgsUpdate = {String.valueOf(category.getId())};
-        ContentValues values = this.userToContentValues(category);
+        ContentValues values = this.categoryToContentValues(category);
         return db.update(TABLE_CATEGORY, values, whereClauseUpdate, whereArgsUpdate);
 
     }
 
 
     public Category getCategory(int id) {
-        String[] cols = {COL_ID,COL_LIBELLE};
-        String whereClauses = COL_ID + "= ?";
+        String[] cols = {COL_ID,COL_LIBELLE,COL_ID_SERVER};
+        String whereClauses = COL_ID_SERVER + "= ?";
         String[] whereArgs = {String.valueOf(id)};
         Cursor c = db.query(TABLE_CATEGORY, cols, whereClauses, whereArgs, null, null, null);
         Category category = null;
 
         if (c.getCount() > 0) {
 
+            category = new Category();
             c.moveToFirst();
             category = cursorToItem(c);
         }
@@ -74,13 +76,14 @@ public class CategorySqlLiteAdapter {
 
     public ArrayList<Category> getCategories() {
         Cursor c = this.getAllCursor();
-        ArrayList<Category> result = null;
+        ArrayList<Category> result = new ArrayList<>();
 
         if(c.getCount() > 0) {
             c.moveToFirst();
             do {
                 cursorToItem(c);
-                result.add(cursorToItem(c));
+                Category cat =  cursorToItem(c);
+                result.add(cat);
             }while(c.moveToNext());
         }
         c.close();
@@ -89,23 +92,25 @@ public class CategorySqlLiteAdapter {
 
     public Cursor getAllCursor(){
 
-        String[] cols = {COL_ID,COL_LIBELLE};
+        String[] cols = {COL_ID,COL_LIBELLE,COL_ID_SERVER};
         Cursor c = db.query(TABLE_CATEGORY,cols,null,null,null,null,null);
         return c;
     }
 
     public static Category cursorToItem(Cursor c) {
 
-        Category category = new Category(0,null);
+        Category category = new Category(0,null,0);
         category.setId(c.getInt(c.getColumnIndex(COL_ID)));
         category.setLibelle(c.getString(c.getColumnIndex(COL_LIBELLE)));
+        category.setIdServer(c.getInt(c.getColumnIndex(COL_ID_SERVER)));
 
         return category;
     }
 
-    private ContentValues userToContentValues(Category category) {
+    private ContentValues categoryToContentValues(Category category) {
         ContentValues values = new ContentValues();
         values.put(COL_LIBELLE,category.getLibelle());
+        values.put(COL_ID_SERVER,category.getIdServer());
         return values;
 
     }

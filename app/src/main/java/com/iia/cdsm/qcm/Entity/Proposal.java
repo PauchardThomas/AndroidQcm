@@ -9,6 +9,7 @@ public class Proposal {
     protected String libelle;
     protected boolean isAnswer;
     protected Question question;
+    protected int idServer;
 
     public int getId() {
         return id;
@@ -42,10 +43,19 @@ public class Proposal {
         this.question = question;
     }
 
-    public Proposal(int id, String libelle, boolean isAnswer, Question question) {
+    public int getIdServer() {
+        return idServer;
+    }
+
+    public void setIdServer(int idServer) {
+        this.idServer = idServer;
+    }
+
+    public Proposal(int id, String libelle, boolean isAnswer, Question question,int idServer) {
         this.id = id;
         this.libelle = libelle;
         this.isAnswer = isAnswer;
         this.question = question;
+        this.idServer = idServer;
     }
 }

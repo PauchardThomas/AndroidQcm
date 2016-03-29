@@ -1,16 +1,20 @@
 package com.iia.cdsm.qcm.Entity;
 
+import java.io.Serializable;
+
 /**
  * Created by Thom' on 11/02/2016.
  */
-public class User {
-    protected int id;
+public class User implements Serializable{
+    protected long id;
     protected String username;
     protected String password;
+    protected int idServer;
+    public static final String SERIAL = "User";
 
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -34,10 +38,25 @@ public class User {
         this.username = username;
     }
 
-    public User(int id, String username, String password) {
+    public int getIdServer() {
+        return idServer;
+    }
+
+    public void setIdServer(int idServer) {
+        this.idServer = idServer;
+    }
+
+    public User(int id, String username, String password , int idServer) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.idServer = idServer;
+    }
+
+    public User(String username,String password,int idServer) {
+        this.username = username;
+        this.password = password;
+        this.idServer = idServer;
     }
 }
 

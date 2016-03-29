@@ -9,6 +9,7 @@ public class Question {
     protected String libelle;
     protected int points;
     protected Qcm qcm;
+    protected int idServer;
 
     public int getId() {
         return id;
@@ -42,10 +43,19 @@ public class Question {
         this.qcm = qcm;
     }
 
-    public Question(int id, String libelle, int points, Qcm qcm) {
+    public int getIdServer() {
+        return idServer;
+    }
+
+    public void setIdServer(int idServer) {
+        this.idServer = idServer;
+    }
+
+    public Question(int id, String libelle, int points, Qcm qcm,int idServer) {
         this.id = id;
         this.libelle = libelle;
         this.points = points;
         this.qcm = qcm;
+        this.idServer = idServer;
     }
 }
