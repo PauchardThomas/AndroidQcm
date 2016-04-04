@@ -1,21 +1,32 @@
 package com.iia.cdsm.qcm.Entity;
 
+import java.util.ArrayList;
+
 /**
  * Created by Thom' on 11/02/2016.
  */
 public class Question {
 
-    protected int id;
+    protected long id;
     protected String libelle;
     protected int points;
     protected Qcm qcm;
     protected int idServer;
+    protected ArrayList<Proposal> proposals;
 
-    public int getId() {
+    public ArrayList<Proposal> getProposals() {
+        return proposals;
+    }
+
+    public void setProposals(ArrayList<Proposal> proposals) {
+        this.proposals = proposals;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -57,5 +68,9 @@ public class Question {
         this.points = points;
         this.qcm = qcm;
         this.idServer = idServer;
+    }
+
+    public Question() {
+
     }
 }

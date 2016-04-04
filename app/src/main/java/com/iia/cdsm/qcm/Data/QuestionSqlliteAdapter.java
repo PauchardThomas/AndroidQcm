@@ -18,28 +18,34 @@ import java.util.ArrayList;
  */
 public class QuestionSqlliteAdapter {
 
-    public static final String TABLE_QUESTION ="question";
-    public static final String COL_ID ="_id";
+    public static final String TABLE_QUESTION = "question";
+    public static final String COL_ID = "_id";
     public static final String COL_LIBELLE = "libelle";
-    public static final String COL_POINTS ="points";
-    public static final String COL_QCM_ID ="qcm_id";
+    public static final String COL_POINTS = "points";
+    public static final String COL_ID_SERVER = "idServer";
+    public static final String COL_QCM_ID = "qcm_id";
     private SQLiteDatabase db;
     private SQLiteOpenHelper helper;
 
     public QuestionSqlliteAdapter(Context context) {
-        this.helper = new iiaSqlLiteOpenHelper(context, iiaSqlLiteOpenHelper.DB_NAME,null,1);
+        this.helper = new iiaSqlLiteOpenHelper(context, iiaSqlLiteOpenHelper.DB_NAME, null, 1);
     }
 
     public static String getSchema() {
         return "CREATE TABLE " + TABLE_QUESTION + "(" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                +COL_LIBELLE + " TEXT NOT NULL,"+COL_POINTS+" int NOT NULL,"
-                +COL_QCM_ID
-                +" int  NOT NULL,FOREIGN KEY (`"+COL_QCM_ID+"`) REFERENCES `qcm` (`_id`));";
+                + COL_LIBELLE + " TEXT NOT NULL," + COL_POINTS + " int NOT NULL,"
+                + COL_ID_SERVER + " INTEGER NOT NULL,"
+                + COL_QCM_ID
+                + " int  NOT NULL,FOREIGN KEY (`" + COL_QCM_ID + "`) REFERENCES `qcm` (`_id`));";
     }
 
-    public void open() {this.db = this.helper.getWritableDatabase();}
+    public void open() {
+        this.db = this.helper.getWritableDatabase();
+    }
 
-    public void close() {this.db.close();}
+    public void close() {
+        this.db.close();
+    }
 
     public long insert(Question question) {
 
@@ -54,7 +60,7 @@ public class QuestionSqlliteAdapter {
         return db.delete(TABLE_QUESTION, whereClauseDelete, whereArgsDelete);
     }
 
-    public long update (Question question) {
+    public long update(Question question) {
 
         String whereClauseUpdate = COL_ID + "= ?";
         String[] whereArgsUpdate = {String.valueOf(question.getId())};
@@ -65,11 +71,11 @@ public class QuestionSqlliteAdapter {
 
 
     public Question getQuestion(int id) {
-        String[] cols = {COL_ID,COL_LIBELLE,COL_POINTS,COL_QCM_ID};
+        String[] cols = {COL_ID, COL_LIBELLE, COL_POINTS,COL_ID_SERVER, COL_QCM_ID};
         String whereClauses = COL_ID + "= ?";
         String[] whereArgs = {String.valueOf(id)};
         Cursor c = db.query(TABLE_QUESTION, cols, whereClauses, whereArgs, null, null, null);
-        Question question= null;
+        Question question = null;
 
         if (c.getCount() > 0) {
 
@@ -82,32 +88,33 @@ public class QuestionSqlliteAdapter {
 
     public ArrayList<Question> getQuestions() {
         Cursor c = this.getAllCursor();
-        ArrayList<Question> result = null;
+        ArrayList<Question> result = new ArrayList<>();
 
-        if(c.getCount() > 0) {
+        if (c.getCount() > 0) {
             c.moveToFirst();
             do {
                 cursorToItem(c);
                 result.add(cursorToItem(c));
-            }while(c.moveToNext());
+            } while (c.moveToNext());
         }
         c.close();
         return result;
     }
 
-    public Cursor getAllCursor(){
+    public Cursor getAllCursor() {
 
-        String[] cols = {COL_ID,COL_LIBELLE,COL_POINTS,COL_QCM_ID};
-        Cursor c = db.query(TABLE_QUESTION,cols,null,null,null,null,null);
+        String[] cols = {COL_ID, COL_LIBELLE, COL_POINTS,COL_ID_SERVER, COL_QCM_ID};
+        Cursor c = db.query(TABLE_QUESTION, cols, null, null, null, null, null);
         return c;
     }
 
     public static Question cursorToItem(Cursor c) {
 
-        Question question = new Question(0,null,0,null,0);
+        Question question = new Question(0, null, 0, null, 0);
         question.setId(c.getInt(c.getColumnIndex(COL_ID)));
         question.setLibelle(c.getString(c.getColumnIndex(COL_LIBELLE)));
         question.setPoints(c.getInt(c.getColumnIndex(COL_POINTS)));
+        question.setIdServer(c.getInt(c.getColumnIndex(COL_ID_SERVER)));
         Qcm qcm = null;
         qcm.setId(c.getInt(c.getColumnIndex(COL_QCM_ID)));
         question.setQcm(qcm);
@@ -120,13 +127,13 @@ public class QuestionSqlliteAdapter {
 
 
         ContentValues values = new ContentValues();
-        values.put(COL_LIBELLE,question.getLibelle());
-        values.put(COL_POINTS,question.getPoints());
-        values.put(COL_QCM_ID,question.getQcm().getId());
+        values.put(COL_LIBELLE, question.getLibelle());
+        values.put(COL_POINTS, question.getPoints());
+        values.put(COL_ID_SERVER,question.getIdServer());
+        values.put(COL_QCM_ID, question.getQcm().getId());
         return values;
 
     }
-
 
 
 }

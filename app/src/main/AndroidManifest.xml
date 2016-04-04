@@ -21,6 +21,9 @@
         <activity android:name=".View.ListQcmActivity">
 
         </activity>
+        <activity android:name=".View.QcmActivity">
+
+        </activity>
     </application>
 
 </manifest>

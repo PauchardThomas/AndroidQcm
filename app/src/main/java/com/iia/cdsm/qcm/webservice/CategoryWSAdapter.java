@@ -28,6 +28,7 @@ public class CategoryWSAdapter {
     public static void getAll(int id_user, AsyncHttpResponseHandler resp) {
         String url = String.format("%s/%s/%s", BASE_URL, ENTITY, id_user);
         client.get(url, resp);
+        client.setTimeout(10000);
     }
 
 

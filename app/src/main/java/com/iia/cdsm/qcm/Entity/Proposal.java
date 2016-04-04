@@ -58,4 +58,8 @@ public class Proposal {
         this.question = question;
         this.idServer = idServer;
     }
+
+    public Proposal() {
+
+    }
 }

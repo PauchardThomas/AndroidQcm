@@ -126,6 +126,7 @@ public class QcmSqlLiteAdapter {
         qcm.setCategory(category);
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+SSSS");
         String datepubliInString = c.getString(c.getColumnIndex(COL_DATE_PUBLI));
         String datefinInString = c.getString(c.getColumnIndex(COL_DATE_FIN));
         String duration = c.getString(c.getColumnIndex(COL_DURATION));
@@ -141,7 +142,7 @@ public class QcmSqlLiteAdapter {
                  date2 = formatter.parse(datefinInString);
             }
             if(duration != null) {
-                 date3 = formatter.parse(duration);
+                 date3 = formatter2.parse(duration);
             }
 
             qcm.setDatePubli(date);
@@ -161,6 +162,7 @@ public class QcmSqlLiteAdapter {
         String dateFin = null;
         String duration = null;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+SSSS");
         if (qcm.getDatePubli() != null) {
             datePubli = sdf.format(qcm.getDatePubli());
         }
@@ -168,7 +170,7 @@ public class QcmSqlLiteAdapter {
             dateFin = sdf.format(qcm.getDateFin());
         }
         if (qcm.getDuration() != null) {
-            duration = sdf.format(qcm.getDuration());
+            duration = sdf2.format(qcm.getDuration());
         }
         ContentValues values = new ContentValues();
         values.put(COL_LIBELLE, qcm.getLibelle());

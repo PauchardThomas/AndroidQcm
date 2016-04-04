@@ -1,12 +1,14 @@
 package com.iia.cdsm.qcm.Entity;
 
+import java.io.Serializable;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Created by Thom' on 11/02/2016.
  */
-public class Qcm {
+public class Qcm implements Serializable {
 
     protected int id;
     protected String libelle;
@@ -16,14 +18,23 @@ public class Qcm {
     protected int nbPoints;
     protected Category category;
     protected int idServer;
+    protected ArrayList<Question> questions;
     public static final String SERIAL = "QCM";
+
+    public ArrayList<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(ArrayList<Question> questions) {
+        this.questions = questions;
+    }
 
     public Date getDuration() {
         return duration;
     }
 
     public void setDuration(Date duration) {
-        duration = duration;
+        this.duration = duration;
     }
 
     public String getLibelle() {

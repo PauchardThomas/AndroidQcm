@@ -27,7 +27,7 @@ public  class CategorySqlLiteAdapter {
 
     public static String getSchema() {
         return "CREATE TABLE " + TABLE_CATEGORY + "(" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COL_LIBELLE + " TEXT NOT NULL,"+COL_ID_SERVER+" int not null);";
+                COL_LIBELLE + " TEXT NOT NULL,"+COL_ID_SERVER+" INTEGER NOT NULL);";
     }
 
     public void open() {this.db = this.helper.getWritableDatabase();}

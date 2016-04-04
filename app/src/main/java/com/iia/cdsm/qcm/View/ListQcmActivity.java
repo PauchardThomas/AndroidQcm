@@ -1,9 +1,13 @@
 package com.iia.cdsm.qcm.View;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.iia.cdsm.qcm.Data.QcmSqlLiteAdapter;
 import com.iia.cdsm.qcm.Entity.Category;
@@ -68,5 +72,20 @@ public class ListQcmActivity extends Activity {
         });
 
 
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Qcm qcm = (Qcm) list.getItemAtPosition(position);
+                int idServer = qcm.getIdServer();
+                String libelle = qcm.getLibelle();
+
+                Toast.makeText(getBaseContext(), "idServer :" + idServer + " Libelle : " + libelle, Toast.LENGTH_SHORT).show();
+
+                Intent i = new Intent(ListQcmActivity.this,QcmActivity.class);
+                i.putExtra(Qcm.SERIAL,qcm);
+
+                startActivity(i);
+            }
+        });
     }
 }

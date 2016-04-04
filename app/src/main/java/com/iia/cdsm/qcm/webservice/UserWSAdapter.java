@@ -17,9 +17,12 @@ import java.io.InputStreamReader;
 
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.config.RequestConfig;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.conn.HttpClientConnectionManager;
 import cz.msebera.android.httpclient.entity.StringEntity;
 import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
+import cz.msebera.android.httpclient.params.BasicHttpParams;
 
 /**
  * Created by Thom' on 21/03/2016.
@@ -42,10 +45,12 @@ public class UserWSAdapter {
 
             // 1. create HttpClient
             HttpClient httpclient = HttpClientBuilder.create().build();
-
+            //1.1 set time out
+            RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
+            requestConfigBuilder.setConnectionRequestTimeout(10000).setMaxRedirects(1);
             // 2. make POST request to the given URL
             HttpPost httpPost = new HttpPost(BASE_URL + "/" + ENTITY);
-
+            httpPost.setConfig(requestConfigBuilder.build());
             String json = "";
 
             // 3. build jsonObject
