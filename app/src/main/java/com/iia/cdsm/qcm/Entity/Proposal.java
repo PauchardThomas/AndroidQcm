@@ -1,9 +1,11 @@
 package com.iia.cdsm.qcm.Entity;
 
+import java.io.Serializable;
+
 /**
  * Created by Thom' on 11/02/2016.
  */
-public class Proposal {
+public class Proposal implements Serializable {
 
     protected int id;
     protected String libelle;
@@ -49,6 +51,9 @@ public class Proposal {
 
     public void setIdServer(int idServer) {
         this.idServer = idServer;
+    }
+    public String toString(){
+        return this.getLibelle();
     }
 
     public Proposal(int id, String libelle, boolean isAnswer, Question question,int idServer) {

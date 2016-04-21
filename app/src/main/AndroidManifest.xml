@@ -24,6 +24,9 @@
         <activity android:name=".View.QcmActivity">
 
         </activity>
+        <activity android:name=".View.QuestionActivity">
+
+        </activity>
     </application>
 
 </manifest>

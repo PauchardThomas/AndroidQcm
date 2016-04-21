@@ -91,7 +91,6 @@ public class UserWSAdapter {
         if (result.equals("[]")) {
             // Mauvais identifiants.
         } else {
-            //myuser = new User(0,null,null,0);
             // On enregistre l'utilisateur en base de donnée.
             JSONArray jsonArray = new JSONArray(result);
             jsonToUser(jsonArray);
@@ -103,9 +102,9 @@ public class UserWSAdapter {
 
            User isUserExist = userSqlLiteAdapter.getUser(myuser.getIdServer());
             if (isUserExist == null) {
-                 userSqlLiteAdapter.insert(myuser);
+               myuser.setId(userSqlLiteAdapter.insert(myuser));
             } else {
-                userSqlLiteAdapter.update(myuser);
+                myuser.setId(userSqlLiteAdapter.update(myuser));
             }
 
             userSqlLiteAdapter.close();

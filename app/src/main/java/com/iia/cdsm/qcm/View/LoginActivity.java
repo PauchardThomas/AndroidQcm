@@ -21,22 +21,28 @@ import java.util.concurrent.ExecutionException;
 
 public class LoginActivity extends AppCompatActivity {
 
+     EditText etUsername, etPassword;
+     Button btConnexion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
 
-        final EditText etUsername, etPassword;
-        final Button btConnexion;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /**
+         * Get items from view
+         */
         etUsername = (EditText) findViewById(R.id.etLogin);
         etPassword = (EditText) findViewById(R.id.etPassword);
         btConnexion = (Button) findViewById(R.id.btConnexion);
 
 
+        /**
+         * Click on connexion button
+         */
         btConnexion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -36,8 +36,8 @@ public class UserSqlLiteAdapter {
     public long insert(User user) {
 
         ContentValues values = this.userToContentValues(user);
-        long test =  db.insert(TABLE_USER,null,values);
-        return test;
+        return db.insert(TABLE_USER,null,values);
+
     }
 
 
@@ -50,10 +50,11 @@ public class UserSqlLiteAdapter {
 
     public long update (User user) {
 
-        String whereClauseUpdate = COL_ID + "= ?";
-        String[] whereArgsUpdate = {String.valueOf(user.getId())};
+        String whereClauseUpdate = COL_ID_SERVER + "= ?";
+        String[] whereArgsUpdate = {String.valueOf(user.getIdServer())};
         ContentValues values = this.userToContentValues(user);
-        return db.update(TABLE_USER, values, whereClauseUpdate, whereArgsUpdate);
+        long test = db.update(TABLE_USER, values, whereClauseUpdate, whereArgsUpdate);
+        return test;
 
     }
 

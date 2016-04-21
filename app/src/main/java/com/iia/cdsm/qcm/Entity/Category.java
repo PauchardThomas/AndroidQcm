@@ -7,16 +7,16 @@ import java.io.Serializable;
  */
 public class Category implements Serializable {
 
-    protected int id;
+    protected long id;
     protected String libelle;
     protected int idServer;
     public static final String SERIAL ="CATEGORY";
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -40,7 +40,7 @@ public class Category implements Serializable {
         return this.getLibelle();
     }
 
-    public Category(int id, String libelle,int idServer) {
+    public Category(long id, String libelle,int idServer) {
         this.id = id;
         this.libelle = libelle;
         this.idServer = idServer;

@@ -86,8 +86,8 @@ public class ProposalSqlLiteAdapter {
 
     }
 
-    public ArrayList<Proposal> getProposals() {
-        Cursor c = this.getAllCursor();
+    public ArrayList<Proposal> getProposals(int id_question) {
+        Cursor c = this.getAllCursor(id_question);
         ArrayList<Proposal> result = new ArrayList<>();
 
         if (c.getCount() > 0) {
@@ -101,16 +101,18 @@ public class ProposalSqlLiteAdapter {
         return result;
     }
 
-    public Cursor getAllCursor() {
+    public Cursor getAllCursor(int id_question) {
 
         String[] cols = {COL_ID, COL_LIBELLE, COL_IS_ANSWER,COL_ID_SERVER, COL_QUESTION_ID};
-        Cursor c = db.query(TABLE_PROPOSAL, cols, null, null, null, null, null);
+        String whereClauses = COL_QUESTION_ID + "= ?";
+        String[] whereArgs = {String.valueOf(id_question)};
+        Cursor c = db.query(TABLE_PROPOSAL, cols, whereClauses, whereArgs, null, null, null);
         return c;
     }
 
     public static Proposal cursorToItem(Cursor c) {
 
-        Proposal proposal = new Proposal(0, null, false, null, 0);
+        Proposal proposal = new Proposal();
         proposal.setId(c.getInt(c.getColumnIndex(COL_ID)));
         proposal.setLibelle(c.getString(c.getColumnIndex(COL_LIBELLE)));
 
@@ -121,7 +123,7 @@ public class ProposalSqlLiteAdapter {
             answer = true;
         }
         proposal.setIsAnswer(answer);
-        Question question = null;
+        Question question = new Question();
         question.setId(c.getInt(c.getColumnIndex(COL_QUESTION_ID)));
         proposal.setQuestion(question);
 

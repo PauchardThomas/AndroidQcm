@@ -18,7 +18,7 @@ public class User implements Serializable{
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -46,7 +46,7 @@ public class User implements Serializable{
         this.idServer = idServer;
     }
 
-    public User(int id, String username, String password , int idServer) {
+    public User(long id, String username, String password , int idServer) {
         this.id = id;
         this.username = username;
         this.password = password;

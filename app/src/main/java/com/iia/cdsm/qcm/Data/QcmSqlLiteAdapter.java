@@ -38,9 +38,11 @@ public class QcmSqlLiteAdapter {
     }
 
     public static String getSchema() {
-        return "CREATE TABLE " + TABLE_QCM + "(" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COL_LIBELLE + " TEXT NOT NULL," + COL_NB_POINTS + " TEXT NOT NULL," + COL_DATE_PUBLI
-                + " DATE," + COL_DATE_FIN + " DATE," + COL_DURATION + " DATE," + COL_ID_SERVER + " INTEGER NOT NULL," + COL_CATEGORY_ID + " int  NOT NULL,FOREIGN KEY (`" + COL_CATEGORY_ID + "`) REFERENCES `category` (`_id`));";
+        return "CREATE TABLE " + TABLE_QCM + "(" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + COL_LIBELLE + " TEXT NOT NULL," + COL_NB_POINTS + " TEXT NOT NULL," + COL_DATE_PUBLI
+                + " DATE," + COL_DATE_FIN + " DATE," + COL_DURATION + " DATE," + COL_ID_SERVER
+                + " INTEGER NOT NULL," + COL_CATEGORY_ID
+                + " int  NOT NULL,FOREIGN KEY (`" + COL_CATEGORY_ID + "`) REFERENCES `category` (`_id`));";
     }
 
     public void open() {
@@ -75,7 +77,8 @@ public class QcmSqlLiteAdapter {
 
 
     public Qcm getQcm(int id) {
-        String[] cols = {COL_ID, COL_LIBELLE, COL_NB_POINTS, COL_DATE_PUBLI, COL_DATE_FIN, COL_CATEGORY_ID, COL_DURATION, COL_ID_SERVER};
+        String[] cols = {COL_ID, COL_LIBELLE, COL_NB_POINTS, COL_DATE_PUBLI, COL_DATE_FIN,
+                COL_CATEGORY_ID, COL_DURATION, COL_ID_SERVER};
         String whereClauses = COL_ID_SERVER + "= ?";
         String[] whereArgs = {String.valueOf(id)};
         Cursor c = db.query(TABLE_QCM, cols, whereClauses, whereArgs, null, null, null);
@@ -108,7 +111,8 @@ public class QcmSqlLiteAdapter {
 
     public Cursor getAllCursor() {
 
-        String[] cols = {COL_ID, COL_LIBELLE, COL_NB_POINTS, COL_DATE_PUBLI, COL_DATE_FIN, COL_CATEGORY_ID, COL_DURATION, COL_ID_SERVER};
+        String[] cols = {COL_ID, COL_LIBELLE, COL_NB_POINTS, COL_DATE_PUBLI, COL_DATE_FIN,
+                COL_CATEGORY_ID, COL_DURATION, COL_ID_SERVER};
         Cursor c = db.query(TABLE_QCM, cols, null, null, null, null, null);
         return c;
     }
@@ -135,14 +139,14 @@ public class QcmSqlLiteAdapter {
             Date date = null;
             Date date2 = null;
             Date date3 = null;
-            if(datepubliInString != null) {
-                 date = formatter.parse(datepubliInString);
+            if (datepubliInString != null) {
+                date = formatter.parse(datepubliInString);
             }
-            if(datefinInString != null) {
-                 date2 = formatter.parse(datefinInString);
+            if (datefinInString != null) {
+                date2 = formatter.parse(datefinInString);
             }
-            if(duration != null) {
-                 date3 = formatter2.parse(duration);
+            if (duration != null) {
+                date3 = formatter2.parse(duration);
             }
 
             qcm.setDatePubli(date);

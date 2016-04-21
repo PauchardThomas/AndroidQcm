@@ -1,18 +1,20 @@
 package com.iia.cdsm.qcm.Entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Thom' on 11/02/2016.
  */
-public class Question {
+public class Question implements Serializable {
 
-    protected long id;
+    protected int id;
     protected String libelle;
     protected int points;
     protected Qcm qcm;
     protected int idServer;
     protected ArrayList<Proposal> proposals;
+    public static final String SERIAL = "QUESTION";
 
     public ArrayList<Proposal> getProposals() {
         return proposals;
@@ -22,11 +24,11 @@ public class Question {
         this.proposals = proposals;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -62,7 +64,11 @@ public class Question {
         this.idServer = idServer;
     }
 
-    public Question(int id, String libelle, int points, Qcm qcm,int idServer) {
+    public String toString() {
+        return this.getLibelle();
+    }
+
+    public Question(int id, String libelle, int points, Qcm qcm, int idServer) {
         this.id = id;
         this.libelle = libelle;
         this.points = points;

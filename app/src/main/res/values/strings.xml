@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Qcm</string>
+    <string name="etLogin">etLogin</string>
 </resources>

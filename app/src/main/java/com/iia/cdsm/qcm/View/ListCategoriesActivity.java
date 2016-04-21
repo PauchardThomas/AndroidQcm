@@ -35,13 +35,17 @@ import cz.msebera.android.httpclient.Header;
  * Created by Thom' on 22/03/2016.
  */
 public class ListCategoriesActivity extends Activity {
+
+    ListView list;
+    User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_list);
 
-        final ListView list = (ListView) this.findViewById(R.id.listViewCategory);
-        final User user = (User) getIntent().getSerializableExtra(User.SERIAL);
+        list = (ListView) this.findViewById(R.id.listViewCategory);
+        user = (User) getIntent().getSerializableExtra(User.SERIAL);
 
         CategoryWSAdapter.getAll(user.getIdServer(), new JsonHttpResponseHandler() {
             @Override
@@ -62,7 +66,7 @@ public class ListCategoriesActivity extends Activity {
                     for (Category category : categories) {
                         Category isCatExist = categorySqlLiteAdapter.getCategory(category.getIdServer());
                         if (isCatExist == null) {
-                            categorySqlLiteAdapter.insert(category);
+                            category.setId(categorySqlLiteAdapter.insert(category));
                             accessUserCategorySqLiteAdapter.insert(user, category);
 
                         } else {
@@ -83,7 +87,8 @@ public class ListCategoriesActivity extends Activity {
                 for (Category category : categories) {
                     item.add(category);
                 }
-                ArrayAdapter<Category> adapter = new ArrayAdapter<>(ListCategoriesActivity.this, android.R.layout.simple_list_item_1, item);
+                ArrayAdapter<Category> adapter = new ArrayAdapter<>(ListCategoriesActivity.this,
+                        android.R.layout.simple_list_item_1, item);
                 list.setAdapter(adapter);
             }
 
@@ -100,11 +105,12 @@ public class ListCategoriesActivity extends Activity {
                 Category cat = (Category) list.getItemAtPosition(position);
                 int idServer = cat.getIdServer();
                 String libelle = cat.getLibelle();
-                Toast.makeText(getBaseContext(), "idServer :" + idServer + " Libelle : " + libelle, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(), "idServer :" + idServer + " Libelle : " + libelle, Toast.LENGTH_SHORT).show();
 
 
                 Intent i = new Intent(ListCategoriesActivity.this, ListQcmActivity.class);
                 i.putExtra(Category.SERIAL, cat);
+                i.putExtra(User.SERIAL, user);
                 startActivity(i);
 
             }

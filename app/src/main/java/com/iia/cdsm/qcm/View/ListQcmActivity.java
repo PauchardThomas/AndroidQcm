@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.iia.cdsm.qcm.Data.QcmSqlLiteAdapter;
 import com.iia.cdsm.qcm.Entity.Category;
 import com.iia.cdsm.qcm.Entity.Qcm;
+import com.iia.cdsm.qcm.Entity.User;
 import com.iia.cdsm.qcm.R;
 import com.iia.cdsm.qcm.webservice.QcmWSAdapter;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -28,14 +29,25 @@ import cz.msebera.android.httpclient.Header;
  */
 public class ListQcmActivity extends Activity {
 
+    ListView list;
+    Category category;
+    User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qcm_list);
 
-        final ListView list = (ListView) this.findViewById(R.id.listViewQcm);
-        final Category category = (Category) getIntent().getSerializableExtra(Category.SERIAL);
+        /**
+         * get Items from view
+         */
+        list = (ListView) this.findViewById(R.id.listViewQcm);
+        category = (Category) getIntent().getSerializableExtra(Category.SERIAL);
+        user = (User) getIntent().getSerializableExtra(User.SERIAL);
 
+        /**
+         * Get all Qcms
+         */
         QcmWSAdapter.getAll(category.getIdServer(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -60,7 +72,8 @@ public class ListQcmActivity extends Activity {
 
                 ArrayList<Qcm> allqcms = qcmSqlLiteAdapter.getQcms();
                 qcmSqlLiteAdapter.close();
-                ArrayAdapter<Qcm> adapter = new ArrayAdapter<>(ListQcmActivity.this, android.R.layout.simple_list_item_1, allqcms);
+                ArrayAdapter<Qcm> adapter = new ArrayAdapter<>(ListQcmActivity.this,
+                        android.R.layout.simple_list_item_1, allqcms);
                 list.setAdapter(adapter);
 
             }
@@ -72,6 +85,9 @@ public class ListQcmActivity extends Activity {
         });
 
 
+        /**
+         * Click on item
+         */
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -79,10 +95,12 @@ public class ListQcmActivity extends Activity {
                 int idServer = qcm.getIdServer();
                 String libelle = qcm.getLibelle();
 
-                Toast.makeText(getBaseContext(), "idServer :" + idServer + " Libelle : " + libelle, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getBaseContext(), "idServer :" + idServer + " Libelle : " + libelle, Toast.LENGTH_SHORT).show();
 
-                Intent i = new Intent(ListQcmActivity.this,QcmActivity.class);
-                i.putExtra(Qcm.SERIAL,qcm);
+                Intent i = new Intent(ListQcmActivity.this, QcmActivity.class);
+                i.putExtra(Qcm.SERIAL, qcm);
+                i.putExtra(Category.SERIAL, category);
+                i.putExtra(User.SERIAL, user);
 
                 startActivity(i);
             }

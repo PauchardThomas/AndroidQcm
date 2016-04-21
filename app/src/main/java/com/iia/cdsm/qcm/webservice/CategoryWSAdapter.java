@@ -37,13 +37,17 @@ public class CategoryWSAdapter {
         ArrayList<Category> item = new ArrayList<Category>();
 
         for (int i = 0; i < json.length(); i++) {
-            Category cate = new Category(0, null, 0);
-            int test = json.length();
+
+            Category cate = new Category();
+
             JSONObject jsonobject = json.getJSONObject(i);
-            int idServer = jsonobject.getInt("id");
-            String libelle = jsonobject.getString("libelle");
+
+            int idServer = jsonobject.getInt(ID);
+            String libelle = jsonobject.getString(LIBELLE);
+
             cate.setIdServer(idServer);
             cate.setLibelle(libelle);
+
             item.add(cate);
         }
 

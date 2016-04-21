@@ -6,8 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.iia.cdsm.qcm.Entity.Proposal;
 import com.iia.cdsm.qcm.Entity.Qcm;
 import com.iia.cdsm.qcm.Entity.Question;
+import com.iia.cdsm.qcm.View.QcmActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,10 +49,10 @@ public class QuestionSqlliteAdapter {
         this.db.close();
     }
 
-    public long insert(Question question) {
+    public int insert(Question question) {
 
         ContentValues values = this.questionToContentValues(question);
-        return db.insert(TABLE_QUESTION, null, values);
+        return (int) db.insert(TABLE_QUESTION, null, values);
     }
 
     public long delete(int id) {
@@ -70,55 +72,74 @@ public class QuestionSqlliteAdapter {
     }
 
 
-    public Question getQuestion(int id) {
-        String[] cols = {COL_ID, COL_LIBELLE, COL_POINTS,COL_ID_SERVER, COL_QCM_ID};
-        String whereClauses = COL_ID + "= ?";
-        String[] whereArgs = {String.valueOf(id)};
+    public Question getQuestion(int id_server) {
+        String[] cols = {COL_ID, COL_LIBELLE, COL_POINTS, COL_ID_SERVER, COL_QCM_ID};
+        String whereClauses = COL_ID_SERVER + "= ?";
+        String[] whereArgs = {String.valueOf(id_server)};
         Cursor c = db.query(TABLE_QUESTION, cols, whereClauses, whereArgs, null, null, null);
         Question question = null;
 
         if (c.getCount() > 0) {
 
+            question = new Question();
             c.moveToFirst();
-            question = cursorToItem(c);
+            question = cursorToItems(c);
         }
         return question;
 
     }
 
-    public ArrayList<Question> getQuestions() {
-        Cursor c = this.getAllCursor();
+    public ArrayList<Question> getQuestions(int id, Context context) {
+        Cursor c = this.getAllCursor(id);
         ArrayList<Question> result = new ArrayList<>();
 
         if (c.getCount() > 0) {
             c.moveToFirst();
             do {
-                cursorToItem(c);
-                result.add(cursorToItem(c));
+                cursorToItem(c, context);
+                result.add(cursorToItem(c, context));
             } while (c.moveToNext());
         }
         c.close();
         return result;
     }
 
-    public Cursor getAllCursor() {
+    public Cursor getAllCursor(int id) {
 
-        String[] cols = {COL_ID, COL_LIBELLE, COL_POINTS,COL_ID_SERVER, COL_QCM_ID};
-        Cursor c = db.query(TABLE_QUESTION, cols, null, null, null, null, null);
+        String[] cols = {COL_ID, COL_LIBELLE, COL_POINTS, COL_ID_SERVER, COL_QCM_ID};
+        String whereClauses = COL_QCM_ID + "= ?";
+        String[] whereArgs = {String.valueOf(id)};
+        Cursor c = db.query(TABLE_QUESTION, cols, whereClauses, whereArgs, null, null, null);
         return c;
     }
 
-    public static Question cursorToItem(Cursor c) {
+    public static Question cursorToItem(Cursor c, Context context) {
 
-        Question question = new Question(0, null, 0, null, 0);
+        Question question = new Question();
+        ArrayList<Proposal> proposals = new ArrayList<Proposal>();
+        ProposalSqlLiteAdapter proposalSqlLiteAdapter = new ProposalSqlLiteAdapter(context);
         question.setId(c.getInt(c.getColumnIndex(COL_ID)));
         question.setLibelle(c.getString(c.getColumnIndex(COL_LIBELLE)));
         question.setPoints(c.getInt(c.getColumnIndex(COL_POINTS)));
         question.setIdServer(c.getInt(c.getColumnIndex(COL_ID_SERVER)));
-        Qcm qcm = null;
+        Qcm qcm = new Qcm();
         qcm.setId(c.getInt(c.getColumnIndex(COL_QCM_ID)));
         question.setQcm(qcm);
 
+        proposalSqlLiteAdapter.open();
+        question.setProposals(proposalSqlLiteAdapter.getProposals(question.getId()));
+        proposalSqlLiteAdapter.close();
+
+        return question;
+    }
+
+
+    public static Question cursorToItems(Cursor c) {
+        Question question = new Question();
+        question.setId(c.getInt(c.getColumnIndex(COL_ID)));
+        question.setLibelle(c.getString(c.getColumnIndex(COL_LIBELLE)));
+        question.setPoints(c.getInt(c.getColumnIndex(COL_POINTS)));
+        question.setIdServer(c.getInt(c.getColumnIndex(COL_ID_SERVER)));
 
         return question;
     }
@@ -129,7 +150,7 @@ public class QuestionSqlliteAdapter {
         ContentValues values = new ContentValues();
         values.put(COL_LIBELLE, question.getLibelle());
         values.put(COL_POINTS, question.getPoints());
-        values.put(COL_ID_SERVER,question.getIdServer());
+        values.put(COL_ID_SERVER, question.getIdServer());
         values.put(COL_QCM_ID, question.getQcm().getId());
         return values;
 

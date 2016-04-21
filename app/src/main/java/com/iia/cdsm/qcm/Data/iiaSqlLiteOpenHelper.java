@@ -14,11 +14,13 @@ public class iiaSqlLiteOpenHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "qcm.sqllite";
 
-    public iiaSqlLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public iiaSqlLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory,
+                                int version) {
         super(context, name, factory, version);
     }
 
-    public iiaSqlLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
+    public iiaSqlLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory,
+                                int version, DatabaseErrorHandler errorHandler) {
         super(context, name, factory, version, errorHandler);
     }
 
@@ -30,6 +32,7 @@ public class iiaSqlLiteOpenHelper extends SQLiteOpenHelper {
         db.execSQL(QuestionSqlliteAdapter.getSchema());
         db.execSQL(ProposalSqlLiteAdapter.getSchema());
         db.execSQL(UserSqlLiteAdapter.getSchema());
+        db.execSQL(ProposalUserSqLiteAdapter.getSchema());
         db.execSQL(AccessUserCategorySqLiteAdapter.getSchema());
     }
 
