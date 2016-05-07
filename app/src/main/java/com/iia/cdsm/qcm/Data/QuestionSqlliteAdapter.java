@@ -20,19 +20,53 @@ import java.util.ArrayList;
  */
 public class QuestionSqlliteAdapter {
 
+    /**
+     * Table Question
+     */
     public static final String TABLE_QUESTION = "question";
+    /**
+     * Column id
+     */
     public static final String COL_ID = "_id";
+    /**
+     * Column libelle
+     */
     public static final String COL_LIBELLE = "libelle";
+    /**
+     * Column points
+     */
     public static final String COL_POINTS = "points";
+    /**
+     * Column id Server
+     */
     public static final String COL_ID_SERVER = "idServer";
+    /**
+     * Column Qcm id
+     */
     public static final String COL_QCM_ID = "qcm_id";
+    /**
+     * Database
+     */
     private SQLiteDatabase db;
+    /**
+     * Helper
+     */
     private SQLiteOpenHelper helper;
 
+    /**
+     * Helper constructor
+     *
+     * @param context activity context
+     */
     public QuestionSqlliteAdapter(Context context) {
         this.helper = new iiaSqlLiteOpenHelper(context, iiaSqlLiteOpenHelper.DB_NAME, null, 1);
     }
 
+    /**
+     * Get Question database schema
+     *
+     * @return Question schema
+     */
     public static String getSchema() {
         return "CREATE TABLE " + TABLE_QUESTION + "(" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COL_LIBELLE + " TEXT NOT NULL," + COL_POINTS + " int NOT NULL,"
@@ -41,20 +75,38 @@ public class QuestionSqlliteAdapter {
                 + " int  NOT NULL,FOREIGN KEY (`" + COL_QCM_ID + "`) REFERENCES `qcm` (`_id`));";
     }
 
+    /**
+     * Get database writable
+     */
     public void open() {
         this.db = this.helper.getWritableDatabase();
     }
 
+    /**
+     * Close database
+     */
     public void close() {
         this.db.close();
     }
 
+    /**
+     * Insert Question
+     *
+     * @param question Question
+     * @return question id inserted
+     */
     public int insert(Question question) {
 
         ContentValues values = this.questionToContentValues(question);
         return (int) db.insert(TABLE_QUESTION, null, values);
     }
 
+    /**
+     * Delete Question
+     *
+     * @param id question id
+     * @return Question id deleted
+     */
     public long delete(int id) {
 
         String whereClauseDelete = COL_ID + "= ?";
@@ -62,6 +114,12 @@ public class QuestionSqlliteAdapter {
         return db.delete(TABLE_QUESTION, whereClauseDelete, whereArgsDelete);
     }
 
+    /**
+     * Update Question
+     *
+     * @param question Question
+     * @return Question id updated
+     */
     public long update(Question question) {
 
         String whereClauseUpdate = COL_ID + "= ?";
@@ -71,7 +129,12 @@ public class QuestionSqlliteAdapter {
 
     }
 
-
+    /**
+     * Get only one question
+     *
+     * @param id_server id_server
+     * @return Question selected
+     */
     public Question getQuestion(int id_server) {
         String[] cols = {COL_ID, COL_LIBELLE, COL_POINTS, COL_ID_SERVER, COL_QCM_ID};
         String whereClauses = COL_ID_SERVER + "= ?";
@@ -89,6 +152,13 @@ public class QuestionSqlliteAdapter {
 
     }
 
+    /**
+     * Get all questions
+     *
+     * @param id      id
+     * @param context context
+     * @return List of questions
+     */
     public ArrayList<Question> getQuestions(int id, Context context) {
         Cursor c = this.getAllCursor(id);
         ArrayList<Question> result = new ArrayList<>();
@@ -104,6 +174,12 @@ public class QuestionSqlliteAdapter {
         return result;
     }
 
+    /**
+     * Get all cursors
+     *
+     * @param id Qcm id
+     * @return all cursors
+     */
     public Cursor getAllCursor(int id) {
 
         String[] cols = {COL_ID, COL_LIBELLE, COL_POINTS, COL_ID_SERVER, COL_QCM_ID};
@@ -113,6 +189,13 @@ public class QuestionSqlliteAdapter {
         return c;
     }
 
+    /**
+     * Convert cursor to Question
+     *
+     * @param c       cursor
+     * @param context context
+     * @return Question
+     */
     public static Question cursorToItem(Cursor c, Context context) {
 
         Question question = new Question();
@@ -134,6 +217,12 @@ public class QuestionSqlliteAdapter {
     }
 
 
+    /**
+     * Convert cursor to Item
+     *
+     * @param c cursor
+     * @return Question
+     */
     public static Question cursorToItems(Cursor c) {
         Question question = new Question();
         question.setId(c.getInt(c.getColumnIndex(COL_ID)));
@@ -144,6 +233,12 @@ public class QuestionSqlliteAdapter {
         return question;
     }
 
+    /**
+     * Convert Question to ContentValues before inserting
+     *
+     * @param question Question
+     * @return ConvertValues to insert
+     */
     private ContentValues questionToContentValues(Question question) {
 
 

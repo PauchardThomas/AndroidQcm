@@ -11,14 +11,4 @@
         android:checked="false"
         android:layout_alignParentEnd="true" />
 
-    <!--<TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/tvQuestion"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/cbQuestion" />-->
-
 </RelativeLayout>

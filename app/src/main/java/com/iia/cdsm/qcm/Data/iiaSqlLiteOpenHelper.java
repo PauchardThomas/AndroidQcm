@@ -12,18 +12,30 @@ import com.iia.cdsm.qcm.Entity.Proposal;
  */
 public class iiaSqlLiteOpenHelper extends SQLiteOpenHelper {
 
+    /**
+     * Database name
+     */
     public static final String DB_NAME = "qcm.sqllite";
 
+    /**
+     * SqlliteOpenHelper constructor
+     *
+     * @param context activity context
+     * @param name    database name
+     * @param factory factory
+     * @param version application version
+     */
     public iiaSqlLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory,
                                 int version) {
         super(context, name, factory, version);
     }
 
-    public iiaSqlLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory,
-                                int version, DatabaseErrorHandler errorHandler) {
-        super(context, name, factory, version, errorHandler);
-    }
 
+    /**
+     * Create Database
+     *
+     * @param db database
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
 
@@ -36,8 +48,14 @@ public class iiaSqlLiteOpenHelper extends SQLiteOpenHelper {
         db.execSQL(AccessUserCategorySqLiteAdapter.getSchema());
     }
 
+    /**
+     * Update Database
+     *
+     * @param db         Database
+     * @param oldVersion Database old version
+     * @param newVersion Database new version
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
     }
 }

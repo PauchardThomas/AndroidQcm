@@ -36,18 +36,48 @@ import cz.msebera.android.httpclient.Header;
  */
 public class QcmActivity extends Activity {
 
-    private static final String NUMBER ="number";
+    /**
+     * Question number
+     */
+    private static final String NUMBER = "number";
+    /**
+     * Duree default value
+     */
+    private static String duree = "Durée non définie";
 
+    /**
+     * TextViews Qcm namme , dureeValue
+     */
     TextView tvQcmLibelle, tvDureeValue;
+    /**
+     * Qcm
+     */
     Qcm qcm;
+    /**
+     * Category
+     */
     Category category;
+    /**
+     * User
+     */
     User user;
+    /**
+     * Button begin Qcm
+     */
     Button btBegin;
-    String duree = "Durée non définie";
 
+    /**
+     * Create activity
+     *
+     * @param savedInstanceState instanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /**
+         * Set View
+         */
         setContentView(R.layout.activity_qcm);
 
         /**
@@ -81,31 +111,43 @@ public class QcmActivity extends Activity {
                  * Get all informations about the qcm clicked
                  */
                 QcmWSAdapter.get(qcm.getIdServer(), new JsonHttpResponseHandler() {
+                    /**
+                     * If server response
+                     * @param statusCode response StatusCode
+                     * @param headers response headers
+                     * @param response response
+                     */
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         super.onSuccess(statusCode, headers, response);
                         try {
+                            //**************************//
+                            //** Convert json to Qcm **//
+                            //************************//
                             Qcm qcm = QcmWSAdapter.jsonObjectToItem(response);
 
-                            /**
-                             * Set id to the Qcm
-                             */
+                            //************************//
+                            //** Set id to the Qcm **//
+                            //**********************//
                             QcmSqlLiteAdapter qcmSqlLiteAdapter = new QcmSqlLiteAdapter(QcmActivity.this);
                             qcmSqlLiteAdapter.open();
                             qcm.setId(qcmSqlLiteAdapter.getQcm(qcm.getIdServer()).getId());
                             qcmSqlLiteAdapter.close();
 
 
+                            //**************************//
+                            //** Get Qcm's proposals **//
+                            //************************//
                             ProposalSqlLiteAdapter proposalSqlLiteAdapter = new ProposalSqlLiteAdapter(QcmActivity.this);
                             proposalSqlLiteAdapter.open();
                             ArrayList<Question> questions = qcm.getQuestions();
 
+                            //*********************************************//
+                            //** Insert / Update Question and Proposals **//
+                            //*******************************************//
                             QuestionSqlliteAdapter questionSqlliteAdapter = new QuestionSqlliteAdapter(QcmActivity.this);
                             questionSqlliteAdapter.open();
 
-                            /**
-                             * Insert Questions and proposals
-                             */
                             for (Question question : questions) {
 
                                 if (questionSqlliteAdapter.getQuestion(question.getIdServer()) == null) {
@@ -125,14 +167,14 @@ public class QcmActivity extends Activity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        //Toast.makeText(getBaseContext(), "OK", Toast.LENGTH_SHORT).show();
 
 
+                        //*********************************************//
+                        //** Create list of questions and proposals **//
+                        //*******************************************//
                         QuestionSqlliteAdapter questionSqlliteAdapter = new QuestionSqlliteAdapter(QcmActivity.this);
                         questionSqlliteAdapter.open();
-                        /**
-                         * Create list of questions and proposals
-                         */
+
                         ArrayList<Question> questions = questionSqlliteAdapter.getQuestions(qcm.getId(), QcmActivity.this);
                         HashMap hashmapQuestions = new HashMap();
                         int counter = 1;
@@ -144,9 +186,10 @@ public class QcmActivity extends Activity {
                         }
                         questionSqlliteAdapter.close();
 
-                        /**
-                         * Send Extra to QuestionActivity
-                         */
+
+                        //******************************************//
+                        //** Create intent , start next activity **//
+                        //****************************************//
                         Intent i = new Intent(QcmActivity.this, QuestionActivity.class);
                         i.putExtra(Question.SERIAL, hashmapQuestions);
                         i.putExtra(NUMBER, 1);
@@ -157,6 +200,13 @@ public class QcmActivity extends Activity {
                         startActivity(i);
                     }
 
+                    /**
+                     * If server doesn't response
+                     * @param statusCode statusCode
+                     * @param headers headers
+                     * @param throwable error
+                     * @param errorResponse errorResponse
+                     */
                     @Override
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                         super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -164,7 +214,5 @@ public class QcmActivity extends Activity {
                 });
             }
         });
-
-
     }
 }

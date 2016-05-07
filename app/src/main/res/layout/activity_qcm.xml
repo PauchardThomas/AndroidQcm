@@ -6,7 +6,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Qcm X"
+        android:hint="@string/tvQcm"
         android:id="@+id/tvQcmLibelle"
         android:layout_marginTop="118dp"
         android:layout_alignParentTop="true"
@@ -15,7 +15,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Durée : "
+        android:hint="@string/tvDuree"
         android:id="@+id/tvDuree"
         android:layout_below="@+id/tvQcmLibelle"
         android:layout_centerHorizontal="true"
@@ -24,7 +24,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="1h00min00sec"
+        android:hint="@string/tvDureeValue"
         android:id="@+id/tvDureeValue"
         android:layout_marginTop="31dp"
         android:layout_below="@+id/tvDuree"
@@ -33,7 +33,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Commencer"
+        android:text="btBegin"
         android:id="@+id/btCommencer"
         android:layout_below="@+id/tvDureeValue"
         android:layout_centerHorizontal="true"

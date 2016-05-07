@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">Qcm</string>
-    <string name="etLogin">etLogin</string>
+    <string name="etLogin">Login</string>
+    <string name="btConnexion">Connexion</string>
+    <string name="tvQcm">Qcm</string>
+    <string name="tvDuree">Durée : </string>
+    <string name="tvDureeValue">1h00min00sec</string>
+    <string name="btBegin">Commencer</string>
+    <string name="tvUsername">Username</string>
+    <string name="tvCategory">Category</string>
+    <string name="tvQuestion">Question</string>
+    <string name="tvPrevious">Precedent</string>
+    <string name="tvNext">Suivant</string>
+    <string name="cbCategory">New Checkbox</string>
 </resources>

@@ -45,21 +45,59 @@ import cz.msebera.android.httpclient.Header;
  */
 public class QuestionActivity extends Activity {
 
+    /**
+     * ArrayAdapter
+     */
     ArrayAdapter dataAdapter;
+    /**
+     * List of proposals
+     */
     ArrayList<Proposal> proposals;
+    /**
+     * Response ListView
+     */
     ListView lvReponse;
+    /**
+     * TextViews question ; qcm , category , Username
+     */
     TextView tvQuestion, tvQcm, tvCategory, tvUsername;
+    /**
+     * Buttons previous , next
+     */
     Button btPrevious, btNext;
+    /**
+     * Question number
+     */
     int number_question;
-    HashMap questionHashMap ;
+    /**
+     * Question hashmap
+     */
+    HashMap questionHashMap;
+    /**
+     * Qcm
+     */
     Qcm qcm;
+    /**
+     * User
+     */
     User user;
+    /**
+     * Category
+     */
     Category category;
 
+    /**
+     * Activity create
+     *
+     * @param savedInstanceState instanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        /**
+         * Set View
+         */
         setContentView(R.layout.activity_question);
         /**
          * Get View items
@@ -98,6 +136,9 @@ public class QuestionActivity extends Activity {
         proposals = question.getProposals();
 
 
+        /**
+         * Call Adapter
+         */
         dataAdapter = new MyCustomAdapter(this, R.layout.row_question, proposals, tvQuestion.getId(),
                 user.getId(), qcm.getId());
         lvReponse.setAdapter(dataAdapter);
@@ -155,16 +196,28 @@ public class QuestionActivity extends Activity {
                     Toast.makeText(QuestionActivity.this, "On est a la dernière question", Toast.LENGTH_SHORT).show();
                     btNext.setText("Terminé");
                     /**
-                     * Send answers user
+                     * Send user answers
                      */
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        /**
+                         * Click on YES : send reponse NO : not yet
+                         * @param dialog dialog YES/NO
+                         * @param which choose
+                         */
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
+
+                                //*******************//
+                                //** Click on YES **//
+                                //*****************//
                                 case DialogInterface.BUTTON_POSITIVE:
                                     Toast.makeText(QuestionActivity.this, "YES", Toast.LENGTH_SHORT).show();
 
 
+                                    //***********************//
+                                    //** Get User answers **//
+                                    //*********************//
                                     ProposalUserSqLiteAdapter proposalUserSqLiteAdapter =
                                             new ProposalUserSqLiteAdapter(QuestionActivity.this);
                                     proposalUserSqLiteAdapter.open();
@@ -172,30 +225,40 @@ public class QuestionActivity extends Activity {
                                             proposalUserSqLiteAdapter.getProposalsUser(user.getId(), qcm.getId());
                                     proposalUserSqLiteAdapter.close();
 
+
+                                    //**********************************//
+                                    //** Send User answers to server **//
+                                    //********************************//
                                     try {
-                                        QuestionWSAdapter.post(QuestionActivity.this, proposalUsers, new AsyncHttpResponseHandler() {
-                                            @Override
-                                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                                        QuestionWSAdapter.post(QuestionActivity.this, proposalUsers,
+                                                new AsyncHttpResponseHandler() {
+                                                    @Override
+                                                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 
-                                            }
+                                                    }
 
-                                            @Override
-                                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                                                    @Override
+                                                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
-                                            }
-                                        });
+                                                    }
+                                                });
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     } catch (UnsupportedEncodingException e) {
                                         e.printStackTrace();
                                     }
+                                    //*********************************//
+                                    //** Back to List of categories **//
+                                    //*******************************//
                                     Intent i = new Intent(QuestionActivity.this, ListCategoriesActivity.class);
                                     i.putExtra(User.SERIAL, user);
                                     startActivity(i);
                                     finish();
-
                                     break;
 
+                                //******************//
+                                //** Click on NO **//
+                                //*****************//
                                 case DialogInterface.BUTTON_NEGATIVE:
                                     Toast.makeText(QuestionActivity.this, "NO", Toast.LENGTH_SHORT).show();
                                     //No button clicked
@@ -204,12 +267,12 @@ public class QuestionActivity extends Activity {
                         }
                     };
 
+                    //**************************//
+                    //** Create Dialog chose **//
+                    //************************//
                     AlertDialog.Builder builder = new AlertDialog.Builder(QuestionActivity.this);
                     builder.setMessage("Envoyer les réponses ?").setPositiveButton("Yes", dialogClickListener)
                             .setNegativeButton("No", dialogClickListener).show();
-                    //
-                } else {
-
                 }
             }
         });
@@ -220,12 +283,37 @@ public class QuestionActivity extends Activity {
      */
     private class MyCustomAdapter extends ArrayAdapter<Proposal> {
 
+        /**
+         * Proposal List
+         */
         private ArrayList<Proposal> proposalList;
+        /**
+         * Quesrtion id
+         */
         private int id_question;
+        /**
+         * User id
+         */
         private long id_user;
+        /**
+         * Qcm id
+         */
         private int id_qcm;
+        /**
+         * ViewHolder
+         */
         ViewHolder holder = null;
 
+        /**
+         * MyCustomAdapter constructor
+         *
+         * @param context            activity context
+         * @param textViewResourceId textViewRessourceid
+         * @param proposalList       List of proposals
+         * @param id_question        question id
+         * @param id_user            user id
+         * @param id_qcm             qcm id
+         */
         public MyCustomAdapter(Context context, int textViewResourceId,
                                ArrayList<Proposal> proposalList, int id_question, long id_user, int id_qcm) {
             super(context, textViewResourceId, proposalList);
@@ -237,10 +325,21 @@ public class QuestionActivity extends Activity {
 
         }
 
+        /**
+         * Viex holder
+         */
         private class ViewHolder {
             CheckBox mycheckbox;
         }
 
+        /**
+         * Get View
+         *
+         * @param position    position view
+         * @param convertView convertView
+         * @param parent      parentView
+         * @return View
+         */
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -248,6 +347,10 @@ public class QuestionActivity extends Activity {
             Log.v("ConvertView", String.valueOf(position));
 
             if (convertView == null) {
+
+                //************************//
+                //** Initialize holder **//
+                //***********************//
                 LayoutInflater vi = (LayoutInflater) getSystemService(
                         Context.LAYOUT_INFLATER_SERVICE);
                 convertView = vi.inflate(R.layout.row_question, null);
@@ -258,13 +361,20 @@ public class QuestionActivity extends Activity {
                 convertView.setTag(holder);
 
 
+                //********************************//
+                //** Get Proposals of question **//
+                //******************************//
                 ProposalUserSqLiteAdapter proposalUserSqLiteAdapter =
                         new ProposalUserSqLiteAdapter(QuestionActivity.this);
                 proposalUserSqLiteAdapter.open();
 
                 ArrayList<ProposalUser> proposalUsers =
                         proposalUserSqLiteAdapter.getProposalsUserQuestion(id_user, id_question);
+                proposalUserSqLiteAdapter.close();
 
+                //****************************//
+                //** Set proposals to View **//
+                //**************************//
                 Proposal proposal = proposalList.get(position);
                 holder.mycheckbox.setText(proposal.getLibelle());
                 holder.mycheckbox.setId(proposal.getId());
@@ -275,6 +385,9 @@ public class QuestionActivity extends Activity {
                     }
                 }
 
+                //*********************//
+                //** Check proposal **//
+                //*******************//
                 holder.mycheckbox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -284,13 +397,21 @@ public class QuestionActivity extends Activity {
                                 cb.getId() + " |" + cb.getText() + "is " + cb.isChecked()
                                 , Toast.LENGTH_SHORT).show();
 
+                        //********************//
+                        //** Open database **//
+                        //*******************//
                         ProposalUserSqLiteAdapter proposalUserSqLiteAdapter =
                                 new ProposalUserSqLiteAdapter(QuestionActivity.this);
                         proposalUserSqLiteAdapter.open();
 
+                        //**************//
+                        //** CHECKED **//
+                        //************//
                         if (cb.isChecked()) {
 
-
+                            //*************************//
+                            //** Insert user answer **//
+                            //***********************//
                             ProposalUser proposalUser = new ProposalUser();
                             proposalUser.setId_user(id_user);
                             proposalUser.setId_qcm(id_qcm);
@@ -300,7 +421,14 @@ public class QuestionActivity extends Activity {
                             proposalUserSqLiteAdapter.insert(proposalUser);
 
 
+                        //****************//
+                        //** UNCHECKED **//
+                        // **************//
                         } else {
+
+                            //*************************//
+                            //** Delete User answer **//
+                            //***********************//
                             proposalUserSqLiteAdapter.delete(id_user, cb.getId());
 
                         }

@@ -29,13 +29,34 @@ import cz.msebera.android.httpclient.params.BasicHttpParams;
  */
 public class UserWSAdapter {
 
+    /**
+     * Api Base Url
+     */
     private static final String BASE_URL = "http://192.168.1.39/app_dev.php/api";
+    /**
+     * User entity
+     */
     private static final String ENTITY = "users";
-    private Context context;
-    public  Context getContext() { return context; }
+    /**
+     * Username
+     */
+    private static final String USERNAME ="username";
+    /**
+     * User password
+     */
+    private static final String PASSWORD ="password";
+    /**
+     * User id
+     */
+    private static final String ID ="id";
 
-
-
+    /**
+     * Login a User without Library
+     * @param user User
+     * @param context activity context
+     * @return User
+     * @throws JSONException
+     */
     public static User Login(User user,Context context) throws JSONException {
         InputStream inputStream = null;
         String result = "";
@@ -55,8 +76,8 @@ public class UserWSAdapter {
 
             // 3. build jsonObject
             JSONObject jsonObject = new JSONObject();
-            jsonObject.accumulate("username", user.getUsername());
-            jsonObject.accumulate("password", user.getPassword());
+            jsonObject.accumulate(USERNAME, user.getUsername());
+            jsonObject.accumulate(PASSWORD, user.getPassword());
 
             // 4. convert JSONObject to JSON to String
             json = jsonObject.toString();
@@ -91,7 +112,7 @@ public class UserWSAdapter {
         if (result.equals("[]")) {
             // Mauvais identifiants.
         } else {
-            // On enregistre l'utilisateur en base de donnée.
+            // Insert user.
             JSONArray jsonArray = new JSONArray(result);
             jsonToUser(jsonArray);
             UserWSAdapter userWSAdapter = new UserWSAdapter();
@@ -112,6 +133,12 @@ public class UserWSAdapter {
         return myuser;
     }
 
+    /**
+     * Convert response to String
+     * @param inputStream response
+     * @return Response to String
+     * @throws IOException
+     */
     private static String convertInputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         String line = "";
@@ -123,6 +150,12 @@ public class UserWSAdapter {
         return result;
     }
 
+    /**
+     * Convert json to User
+     * @param json json
+     * @return User
+     * @throws JSONException
+     */
     public static User jsonToUser(JSONArray json) throws JSONException {
         User user = new User(0,null,null,0);
 
@@ -130,9 +163,9 @@ public class UserWSAdapter {
             int test = json.length();
             JSONObject jsonobject = json.getJSONObject(i);
 
-            int idServer = jsonobject.getInt("id");
-            String username = jsonobject.getString("username");
-            String password = jsonobject.getString("password");
+            int idServer = jsonobject.getInt(ID);
+            String username = jsonobject.getString(USERNAME);
+            String password = jsonobject.getString(PASSWORD);
 
             user.setUsername(username);
             user.setPassword(password);

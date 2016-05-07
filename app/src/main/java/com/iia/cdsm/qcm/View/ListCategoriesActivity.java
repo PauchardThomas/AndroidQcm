@@ -36,25 +36,57 @@ import cz.msebera.android.httpclient.Header;
  */
 public class ListCategoriesActivity extends Activity {
 
+    /**
+     * ListView
+     */
     ListView list;
+    /**
+     * User
+     */
     User user;
 
+    /**
+     * Create activity
+     *
+     * @param savedInstanceState instanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Set Content View
         setContentView(R.layout.activity_category_list);
 
+        /**
+         * Get item view
+         */
         list = (ListView) this.findViewById(R.id.listViewCategory);
+        /**
+         * Get intent
+         */
         user = (User) getIntent().getSerializableExtra(User.SERIAL);
 
+        /**
+         * Get all Categories by user
+         */
         CategoryWSAdapter.getAll(user.getIdServer(), new JsonHttpResponseHandler() {
+            /**
+             * If server response : Success
+             * @param statusCode response statusCode
+             * @param headers response header
+             * @param response response
+             */
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
 
                 try {
+                    // Convert response to list of categories
                     ArrayList<Category> categories = CategoryWSAdapter.jsonArrayToItem(response);
 
+                    //*******************************//
+                    //** Open database connexions **//
+                    //*****************************//
                     CategorySqlLiteAdapter categorySqlLiteAdapter =
                             new CategorySqlLiteAdapter(ListCategoriesActivity.this);
                     categorySqlLiteAdapter.open();
@@ -63,6 +95,9 @@ public class ListCategoriesActivity extends Activity {
                             new AccessUserCategorySqLiteAdapter(ListCategoriesActivity.this);
                     accessUserCategorySqLiteAdapter.open();
 
+                    //*********************************//
+                    //** Insert / Update Categories **//
+                    //*******************************//
                     for (Category category : categories) {
                         Category isCatExist = categorySqlLiteAdapter.getCategory(category.getIdServer());
                         if (isCatExist == null) {
@@ -77,12 +112,19 @@ public class ListCategoriesActivity extends Activity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                //*********************//
+                //** Get categories **//
+                //*******************//
                 CategorySqlLiteAdapter categorySqlLiteAdapter =
                         new CategorySqlLiteAdapter(ListCategoriesActivity.this);
                 categorySqlLiteAdapter.open();
                 ArrayList<Category> categories = categorySqlLiteAdapter.getCategories();
                 categorySqlLiteAdapter.close();
 
+                //*******************************//
+                //** Add categories to liView **//
+                //*****************************//
                 List<Category> item = new ArrayList<>();
                 for (Category category : categories) {
                     item.add(category);
@@ -92,22 +134,35 @@ public class ListCategoriesActivity extends Activity {
                 list.setAdapter(adapter);
             }
 
+            /**
+             * If server doesn't response
+             * @param statusCode statusCode
+             * @param headers headers
+             * @param throwable error
+             * @param errorResponse errorResponse
+             */
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         });
 
+
+        /**
+         * Click on item on ListView
+         */
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
+                // Get Category
                 Category cat = (Category) list.getItemAtPosition(position);
-                int idServer = cat.getIdServer();
-                String libelle = cat.getLibelle();
-                //Toast.makeText(getBaseContext(), "idServer :" + idServer + " Libelle : " + libelle, Toast.LENGTH_SHORT).show();
 
 
+                //********************************************//
+                //** Create intent and start next activity **//
+                //******************************************//
                 Intent i = new Intent(ListCategoriesActivity.this, ListQcmActivity.class);
                 i.putExtra(Category.SERIAL, cat);
                 i.putExtra(User.SERIAL, user);

@@ -29,13 +29,30 @@ import cz.msebera.android.httpclient.Header;
  */
 public class ListQcmActivity extends Activity {
 
+    /**
+     * ListView
+     */
     ListView list;
+    /**
+     * Category
+     */
     Category category;
+    /**
+     * User
+     */
     User user;
 
+    /**
+     * Create activity
+     *
+     * @param savedInstanceState instanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /**
+         * Set view
+         */
         setContentView(R.layout.activity_qcm_list);
 
         /**
@@ -46,21 +63,38 @@ public class ListQcmActivity extends Activity {
         user = (User) getIntent().getSerializableExtra(User.SERIAL);
 
         /**
-         * Get all Qcms
+         * Get all Qcm
          */
         QcmWSAdapter.getAll(category.getIdServer(), new JsonHttpResponseHandler() {
+            /**
+             * If server response
+             * @param statusCode response statusCode
+             * @param headers response headers
+             * @param response response
+             */
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
-                ArrayList<Qcm> qcms = new ArrayList<Qcm>();
+
+                //**************************************//
+                //** Convert response to list of qcm **//
+                //************************************//
+                ArrayList<Qcm> qcms = new ArrayList<>();
                 try {
                     qcms = QcmWSAdapter.jsonArrayToItem(response);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                //********************//
+                //** Open database **//
+                //******************//
                 QcmSqlLiteAdapter qcmSqlLiteAdapter =
                         new QcmSqlLiteAdapter(ListQcmActivity.this);
                 qcmSqlLiteAdapter.open();
+
+                //**************************//
+                //** Insert / update qcm **//
+                //************************//
                 for (Qcm qcm : qcms) {
                     Qcm isQcmExist = qcmSqlLiteAdapter.getQcm(qcm.getIdServer());
                     if (isQcmExist == null) {
@@ -70,14 +104,28 @@ public class ListQcmActivity extends Activity {
                     }
                 }
 
+                //******************//
+                //** Get all Qcm **//
+                //****************//
                 ArrayList<Qcm> allqcms = qcmSqlLiteAdapter.getQcms();
                 qcmSqlLiteAdapter.close();
+
+                //**************************//
+                //** Set qcm to listView **//
+                //************************//
                 ArrayAdapter<Qcm> adapter = new ArrayAdapter<>(ListQcmActivity.this,
                         android.R.layout.simple_list_item_1, allqcms);
                 list.setAdapter(adapter);
 
             }
 
+            /**
+             * If server doesn't response
+             * @param statusCode statusCode
+             * @param headers header
+             * @param throwable error
+             * @param errorResponse errorResponse
+             */
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -89,14 +137,24 @@ public class ListQcmActivity extends Activity {
          * Click on item
          */
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /**
+             * Click on list's item
+             * @param parent parent
+             * @param view view
+             * @param position position item
+             * @param id id item
+             */
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //**********************//
+                //** Get qcm clicked **//
+                //********************//
                 Qcm qcm = (Qcm) list.getItemAtPosition(position);
-                int idServer = qcm.getIdServer();
-                String libelle = qcm.getLibelle();
 
-               // Toast.makeText(getBaseContext(), "idServer :" + idServer + " Libelle : " + libelle, Toast.LENGTH_SHORT).show();
-
+                //********************************************//
+                //** Create intent and start next activity **//
+                //******************************************//
                 Intent i = new Intent(ListQcmActivity.this, QcmActivity.class);
                 i.putExtra(Qcm.SERIAL, qcm);
                 i.putExtra(Category.SERIAL, category);

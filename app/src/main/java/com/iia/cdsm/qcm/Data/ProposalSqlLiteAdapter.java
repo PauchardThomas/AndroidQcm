@@ -20,39 +20,91 @@ import java.util.Date;
  */
 public class ProposalSqlLiteAdapter {
 
+    /**
+     * Proposal Table
+     */
     public static final String TABLE_PROPOSAL = "proposal";
+    /**
+     * Column id
+     */
     public static final String COL_ID = "_id";
+    /**
+     * Column libelle
+     */
     public static final String COL_LIBELLE = "libelle";
+    /**
+     * Column isAnswer
+     */
     public static final String COL_IS_ANSWER = "isAnswer";
+    /**
+     * Column Server ID
+     */
     public static final String COL_ID_SERVER = "idServer";
+    /**
+     * Column Question ID
+     */
     public static final String COL_QUESTION_ID = "question_id";
+    /**
+     * Database
+     */
     private SQLiteDatabase db;
+    /**
+     * Helper
+     */
     private SQLiteOpenHelper helper;
 
+    /**
+     * ProposalSqlLiteAdapter constructor
+     *
+     * @param context activity context
+     */
     public ProposalSqlLiteAdapter(Context context) {
         this.helper = new iiaSqlLiteOpenHelper(context, iiaSqlLiteOpenHelper.DB_NAME, null, 1);
     }
 
+    /**
+     * Get Proposal database schema
+     *
+     * @return database schema
+     */
     public static String getSchema() {
         return "CREATE TABLE " + TABLE_PROPOSAL + "(" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COL_LIBELLE + " TEXT NOT NULL," + COL_IS_ANSWER + " BOOLEAN NOT NULL,"+COL_ID_SERVER+" INTEGER NOT NULL," +
+                COL_LIBELLE + " TEXT NOT NULL," + COL_IS_ANSWER + " BOOLEAN NOT NULL," + COL_ID_SERVER + " INTEGER NOT NULL," +
                 COL_QUESTION_ID + " int  NOT NULL,FOREIGN KEY (`" + COL_QUESTION_ID + "`) REFERENCES `question` (`_id`));";
     }
 
+    /**
+     * Set database writable
+     */
     public void open() {
         this.db = this.helper.getWritableDatabase();
     }
 
+    /**
+     * Close database
+     */
     public void close() {
         this.db.close();
     }
 
+    /**
+     * Insert Proposal
+     *
+     * @param proposal Proposal
+     * @return id inserted
+     */
     public long insert(Proposal proposal) {
 
         ContentValues values = this.proposalToContentValues(proposal);
         return db.insert(TABLE_PROPOSAL, null, values);
     }
 
+    /**
+     * Delete Proposal
+     *
+     * @param id id to deleted
+     * @return Proposal id deleted
+     */
     public long delete(int id) {
 
         String whereClauseDelete = COL_ID + "= ?";
@@ -60,6 +112,12 @@ public class ProposalSqlLiteAdapter {
         return db.delete(TABLE_PROPOSAL, whereClauseDelete, whereArgsDelete);
     }
 
+    /**
+     * Update Proposal
+     *
+     * @param proposal proposal to update
+     * @return Proposal id updated
+     */
     public long update(Proposal proposal) {
 
         String whereClauseUpdate = COL_ID + "= ?";
@@ -69,9 +127,14 @@ public class ProposalSqlLiteAdapter {
 
     }
 
-
+    /**
+     * Get only one Proposal
+     *
+     * @param id proposal id to get
+     * @return Proposal to get
+     */
     public Proposal getProposal(int id) {
-        String[] cols = {COL_ID, COL_LIBELLE, COL_IS_ANSWER,COL_ID_SERVER, COL_QUESTION_ID};
+        String[] cols = {COL_ID, COL_LIBELLE, COL_IS_ANSWER, COL_ID_SERVER, COL_QUESTION_ID};
         String whereClauses = COL_ID + "= ?";
         String[] whereArgs = {String.valueOf(id)};
         Cursor c = db.query(TABLE_PROPOSAL, cols, whereClauses, whereArgs, null, null, null);
@@ -86,6 +149,12 @@ public class ProposalSqlLiteAdapter {
 
     }
 
+    /**
+     * Get all Proposals from a Question
+     *
+     * @param id_question Question id
+     * @return List of proposals from a question
+     */
     public ArrayList<Proposal> getProposals(int id_question) {
         Cursor c = this.getAllCursor(id_question);
         ArrayList<Proposal> result = new ArrayList<>();
@@ -101,15 +170,27 @@ public class ProposalSqlLiteAdapter {
         return result;
     }
 
+    /**
+     * Get all cursor from Proposal column
+     *
+     * @param id_question id_question
+     * @return Proposal cursors
+     */
     public Cursor getAllCursor(int id_question) {
 
-        String[] cols = {COL_ID, COL_LIBELLE, COL_IS_ANSWER,COL_ID_SERVER, COL_QUESTION_ID};
+        String[] cols = {COL_ID, COL_LIBELLE, COL_IS_ANSWER, COL_ID_SERVER, COL_QUESTION_ID};
         String whereClauses = COL_QUESTION_ID + "= ?";
         String[] whereArgs = {String.valueOf(id_question)};
         Cursor c = db.query(TABLE_PROPOSAL, cols, whereClauses, whereArgs, null, null, null);
         return c;
     }
 
+    /**
+     * Convert cursor to Proposal
+     *
+     * @param c cursor
+     * @return Proposal
+     */
     public static Proposal cursorToItem(Cursor c) {
 
         Proposal proposal = new Proposal();
@@ -131,6 +212,12 @@ public class ProposalSqlLiteAdapter {
         return proposal;
     }
 
+    /**
+     * Convert Proposal to ContentValues before inserting
+     *
+     * @param proposal Proposal
+     * @return Content Values to inserting
+     */
     private ContentValues proposalToContentValues(Proposal proposal) {
 
 

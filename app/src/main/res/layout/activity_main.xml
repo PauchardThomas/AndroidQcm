@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:hint="Login"
+        android:hint="@string/etLogin"
         android:ems="10"
         android:id="@+id/etLogin"
         android:layout_marginTop="87dp"
@@ -31,7 +31,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Connexion"
+        android:text="@string/btConnexion"
         android:id="@+id/btConnexion"
         android:layout_below="@+id/etPassword"
         android:layout_centerHorizontal="true"

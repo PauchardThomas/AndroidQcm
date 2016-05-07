@@ -22,34 +22,94 @@ import java.util.Date;
  */
 public class QcmWSAdapter {
 
+    /**
+     * Api Base Url
+     */
     private static final String BASE_URL = "http://192.168.1.39/app_dev.php/api";
+    /**
+     * Api qcm URL
+     */
     private static final String ENTITY = "qcm";
+    /**
+     * Api qcms URL
+     */
     private static final String ENTITY2 = "qcms";
+    /**
+     * api list qcm
+     */
     private static final String ENTITY_LIST = "lists";
-    private static final int VERSION = 1;
+    /**
+     * Library AsyncHttpClient
+     */
     private static AsyncHttpClient client = new AsyncHttpClient();
+    /**
+     * Qcm id
+     */
     private static final String ID = "id";
+    /**
+     * Qcm name
+     */
     private static final String LIBELLE = "libelle";
+    /**
+     * Qcm duration
+     */
     private static final String DURATION = "duration";
+    /**
+     * Qcm points
+     */
     private static final String NB_POINTS = "nbPoints";
+    /**
+     * Question points
+     */
     private static final String POINTS = "points";
+    /**
+     * Question's proposal
+     */
     private static final String QUESTION_PROP = "question_prop";
+    /**
+     * Qcm category
+     */
     private static final String CATEGORY = "category";
+    /**
+     * Qcm questions
+     */
     private static final String QUESTION_ID = "question_id";
+    /**
+     * Date format
+     */
     private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss+SSSS";
 
+    /**
+     * Get all Qcm for one Category
+     *
+     * @param id_category Category id
+     * @param resp        response
+     */
     public static void getAll(int id_category, AsyncHttpResponseHandler resp) {
         String url = String.format("%s/%s/%s/%s", BASE_URL, ENTITY_LIST, id_category, ENTITY);
         client.get(url, resp);
         client.setTimeout(3000);
     }
 
+    /**
+     * Get Qcm data for one Qcm
+     *
+     * @param id_qcm qcm id
+     * @param resp   response
+     */
     public static void get(int id_qcm, AsyncHttpResponseHandler resp) {
         String url = String.format("%s/%s/%s", BASE_URL, ENTITY2, id_qcm);
         client.get(url, resp);
         client.setTimeout(3000);
     }
 
+    /**
+     * Convert jsonArray to list of Qcm
+     *
+     * @param json jsonArray
+     * @return list of Qcm
+     * @throws JSONException
+     */
     public static ArrayList<Qcm> jsonArrayToItem(JSONArray json) throws JSONException {
 
         ArrayList<Qcm> item = new ArrayList<>();
@@ -86,6 +146,13 @@ public class QcmWSAdapter {
         return item;
     }
 
+    /**
+     * Convert json Object to Qcm
+     *
+     * @param json json Object
+     * @return Qcm
+     * @throws JSONException
+     */
     public static Qcm jsonObjectToItem(JSONObject json) throws JSONException {
 
 

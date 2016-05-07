@@ -13,7 +13,7 @@
     <TextView
         android:layout_width="79dp"
         android:layout_height="31dp"
-        android:text="Username"
+        android:text="@string/tvUsername"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_weight="0.44"
         android:id="@+id/tvUsername" />
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Category"
+        android:text="@string/tvCategory"
         android:layout_weight="0.41"
         android:id="@+id/tvCategory" />
 
@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Qcm"
+        android:text="@string/tvQcm"
         android:layout_weight="0.20"
         android:id="@+id/tvQcm" />
 
@@ -41,7 +41,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Question"
+        android:text="@string/tvQuestion"
         android:layout_weight="0.20"
         android:layout_marginTop="86dp"
         android:gravity="center"
@@ -69,7 +69,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:text="Precedent"
+        android:text="@string/tvPrevious"
         android:layout_weight="0.44"
         android:id="@+id/btPrevious" />
 
@@ -77,7 +77,7 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_gravity="center"
-        android:text="Suivant"
+        android:text="@string/tvNext"
         android:layout_weight="0.44"
         android:id="@+id/btNext" />
 

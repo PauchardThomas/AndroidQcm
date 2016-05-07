@@ -21,22 +21,73 @@ import java.util.Date;
  */
 public class QcmSqlLiteAdapter {
 
+    /**
+     * Qcm Table
+     */
     public static final String TABLE_QCM = "qcm";
+    /**
+     * Column id
+     */
     public static final String COL_ID = "_id";
+    /**
+     * Column libelle
+     */
     public static final String COL_LIBELLE = "libelle";
+    /**
+     * Column publication date
+     */
     public static final String COL_DATE_PUBLI = "date_publi";
+    /**
+     * Column publication end date
+     */
     public static final String COL_DATE_FIN = "date_fin";
+    /**
+     * Column number of points
+     */
     public static final String COL_NB_POINTS = "nb_points";
+    /**
+     * Column server ID
+     */
     public static final String COL_ID_SERVER = "idServer";
+    /**
+     * Column duration
+     */
     public static final String COL_DURATION = "duration";
+    /**
+     * Column Category ID
+     */
     public static final String COL_CATEGORY_ID = "category_id";
+    /**
+     * Date publi format
+     */
+    private static final String DATE_PUBLI_FORMAT = "yyyy-MM-dd";
+    /**
+     * Duration format
+     */
+    private static final String DURATION_FORMAT = "yyyy-MM-dd'T'HH:mm:ss+SSSS";
+    /**
+     * Database
+     */
     private SQLiteDatabase db;
+    /**
+     * Helper
+     */
     private SQLiteOpenHelper helper;
 
+    /**
+     * Helper constructor
+     *
+     * @param context activity context
+     */
     public QcmSqlLiteAdapter(Context context) {
         this.helper = new iiaSqlLiteOpenHelper(context, iiaSqlLiteOpenHelper.DB_NAME, null, 1);
     }
 
+    /**
+     * Get Qcm database schema
+     *
+     * @return Qcm schema
+     */
     public static String getSchema() {
         return "CREATE TABLE " + TABLE_QCM + "(" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COL_LIBELLE + " TEXT NOT NULL," + COL_NB_POINTS + " TEXT NOT NULL," + COL_DATE_PUBLI
@@ -45,20 +96,38 @@ public class QcmSqlLiteAdapter {
                 + " int  NOT NULL,FOREIGN KEY (`" + COL_CATEGORY_ID + "`) REFERENCES `category` (`_id`));";
     }
 
+    /**
+     * Get database writable
+     */
     public void open() {
         this.db = this.helper.getWritableDatabase();
     }
 
+    /**
+     * Close database
+     */
     public void close() {
         this.db.close();
     }
 
+    /**
+     * Insert Qcm
+     *
+     * @param qcm Qcm
+     * @return qcm id inserted
+     */
     public long insert(Qcm qcm) {
 
         ContentValues values = this.qcmToContentValues(qcm);
         return db.insert(TABLE_QCM, null, values);
     }
 
+    /**
+     * Delete Qcm
+     *
+     * @param id Qcm id
+     * @return Qcm id deleted
+     */
     public long delete(int id) {
 
         String whereClauseDelete = COL_ID + "= ?";
@@ -66,6 +135,12 @@ public class QcmSqlLiteAdapter {
         return db.delete(TABLE_QCM, whereClauseDelete, whereArgsDelete);
     }
 
+    /**
+     * Update Qcm
+     *
+     * @param qcm Qcm
+     * @return Qcm id updated
+     */
     public long update(Qcm qcm) {
 
         String whereClauseUpdate = COL_ID + "= ?";
@@ -76,6 +151,12 @@ public class QcmSqlLiteAdapter {
     }
 
 
+    /**
+     * Get only one Qcm
+     *
+     * @param id Qcm id
+     * @return Qcm selected
+     */
     public Qcm getQcm(int id) {
         String[] cols = {COL_ID, COL_LIBELLE, COL_NB_POINTS, COL_DATE_PUBLI, COL_DATE_FIN,
                 COL_CATEGORY_ID, COL_DURATION, COL_ID_SERVER};
@@ -94,6 +175,11 @@ public class QcmSqlLiteAdapter {
 
     }
 
+    /**
+     * Get all Qcm
+     *
+     * @return List of Qcm
+     */
     public ArrayList<Qcm> getQcms() {
         Cursor c = this.getAllCursor();
         ArrayList<Qcm> result = new ArrayList<>();
@@ -109,6 +195,11 @@ public class QcmSqlLiteAdapter {
         return result;
     }
 
+    /**
+     * Get all cursors
+     *
+     * @return all cursors
+     */
     public Cursor getAllCursor() {
 
         String[] cols = {COL_ID, COL_LIBELLE, COL_NB_POINTS, COL_DATE_PUBLI, COL_DATE_FIN,
@@ -117,6 +208,12 @@ public class QcmSqlLiteAdapter {
         return c;
     }
 
+    /**
+     * Convert cursor to Qcm
+     *
+     * @param c cursor
+     * @return Qcm
+     */
     public static Qcm cursorToItem(Cursor c) {
 
         Qcm qcm = new Qcm();
@@ -129,29 +226,29 @@ public class QcmSqlLiteAdapter {
         category.setId(c.getInt(c.getColumnIndex(COL_CATEGORY_ID)));
         qcm.setCategory(category);
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+SSSS");
+        SimpleDateFormat formatterDatePubli = new SimpleDateFormat(DATE_PUBLI_FORMAT);
+        SimpleDateFormat formatterDuration = new SimpleDateFormat(DURATION_FORMAT);
         String datepubliInString = c.getString(c.getColumnIndex(COL_DATE_PUBLI));
         String datefinInString = c.getString(c.getColumnIndex(COL_DATE_FIN));
         String duration = c.getString(c.getColumnIndex(COL_DURATION));
         try {
 
-            Date date = null;
-            Date date2 = null;
-            Date date3 = null;
+            Date datePubli = null;
+            Date dateFin = null;
+            Date dateDuration = null;
             if (datepubliInString != null) {
-                date = formatter.parse(datepubliInString);
+                datePubli = formatterDatePubli.parse(datepubliInString);
             }
             if (datefinInString != null) {
-                date2 = formatter.parse(datefinInString);
+                dateFin = formatterDatePubli.parse(datefinInString);
             }
             if (duration != null) {
-                date3 = formatter2.parse(duration);
+                dateDuration = formatterDuration.parse(duration);
             }
 
-            qcm.setDatePubli(date);
-            qcm.setDateFin(date2);
-            qcm.setDuration(date3);
+            qcm.setDatePubli(datePubli);
+            qcm.setDateFin(dateFin);
+            qcm.setDuration(dateDuration);
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -160,21 +257,27 @@ public class QcmSqlLiteAdapter {
         return qcm;
     }
 
+    /**
+     * Convert Qcm to Content Values before inserting
+     *
+     * @param qcm Qcm
+     * @return Content Values to insert
+     */
     private ContentValues qcmToContentValues(Qcm qcm) {
 
         String datePubli = null;
         String dateFin = null;
         String duration = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+SSSS");
+        SimpleDateFormat datePubliFormat = new SimpleDateFormat(DATE_PUBLI_FORMAT);
+        SimpleDateFormat durationFormat = new SimpleDateFormat(DURATION_FORMAT);
         if (qcm.getDatePubli() != null) {
-            datePubli = sdf.format(qcm.getDatePubli());
+            datePubli = datePubliFormat.format(qcm.getDatePubli());
         }
         if (qcm.getDateFin() != null) {
-            dateFin = sdf.format(qcm.getDateFin());
+            dateFin = datePubliFormat.format(qcm.getDateFin());
         }
         if (qcm.getDuration() != null) {
-            duration = sdf2.format(qcm.getDuration());
+            duration = durationFormat.format(qcm.getDuration());
         }
         ContentValues values = new ContentValues();
         values.put(COL_LIBELLE, qcm.getLibelle());
