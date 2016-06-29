@@ -22,10 +22,10 @@ import cz.msebera.android.httpclient.entity.StringEntity;
  */
 public class QuestionWSAdapter {
 
-    private static final String BASE_URL = "http://192.168.1.39/app_dev.php/api";
+    private static final String BASE_URL = "http://192.168.100.212/qcm2/web/app_dev.php/api";
     private static final String ENTITY = "question";
     private static final int VERSION = 1;
-    private static AsyncHttpClient client = new AsyncHttpClient();
+    private static AsyncHttpClient client = new AsyncHttpClient(true,80,443);
 
 
     public static void post(Context context,ArrayList<ProposalUser> proposalUsers,

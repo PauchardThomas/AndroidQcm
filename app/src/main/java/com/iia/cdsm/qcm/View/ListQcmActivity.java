@@ -19,6 +19,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -66,6 +67,7 @@ public class ListQcmActivity extends Activity {
          * Get all Qcm
          */
         QcmWSAdapter.getAll(category.getIdServer(), new JsonHttpResponseHandler() {
+
             /**
              * If server response
              * @param statusCode response statusCode
@@ -127,8 +129,26 @@ public class ListQcmActivity extends Activity {
              * @param errorResponse errorResponse
              */
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
+                //********************//
+                //** Open database **//
+                //******************//
+                QcmSqlLiteAdapter qcmSqlLiteAdapter =
+                        new QcmSqlLiteAdapter(ListQcmActivity.this);
+                qcmSqlLiteAdapter.open();
+                //******************//
+                //** Get all Qcm **//
+                //****************//
+                ArrayList<Qcm> allqcms = qcmSqlLiteAdapter.getQcms();
+                qcmSqlLiteAdapter.close();
+
+                //**************************//
+                //** Set qcm to listView **//
+                //************************//
+                ArrayAdapter<Qcm> adapter = new ArrayAdapter<>(ListQcmActivity.this,
+                        android.R.layout.simple_list_item_1, allqcms);
+                list.setAdapter(adapter);
             }
         });
 

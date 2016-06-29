@@ -1,6 +1,7 @@
 package com.iia.cdsm.qcm.webservice;
 
 import android.content.Context;
+import android.net.wifi.WifiConfiguration;
 import android.util.Log;
 
 import com.iia.cdsm.qcm.Data.UserSqlLiteAdapter;
@@ -20,8 +21,13 @@ import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.config.RequestConfig;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.conn.HttpClientConnectionManager;
+import cz.msebera.android.httpclient.conn.ssl.SSLConnectionSocketFactory;
+import cz.msebera.android.httpclient.conn.ssl.SSLContextBuilder;
+import cz.msebera.android.httpclient.conn.ssl.TrustSelfSignedStrategy;
 import cz.msebera.android.httpclient.entity.StringEntity;
+import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
 import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
+import cz.msebera.android.httpclient.impl.client.HttpClients;
 import cz.msebera.android.httpclient.params.BasicHttpParams;
 
 /**
@@ -32,7 +38,7 @@ public class UserWSAdapter {
     /**
      * Api Base Url
      */
-    private static final String BASE_URL = "http://192.168.1.39/app_dev.php/api";
+    private static final String BASE_URL = "http://192.168.100.212/qcm2/web/app_dev.php/api";
     /**
      * User entity
      */
@@ -64,11 +70,16 @@ public class UserWSAdapter {
         User myuser = null;
         try {
 
+
             // 1. create HttpClient
-            HttpClient httpclient = HttpClientBuilder.create().build();
+            SSLContextBuilder builder = new SSLContextBuilder();
+            builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
+            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(builder.build());
+            CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
+
             //1.1 set time out
             RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
-            requestConfigBuilder.setConnectionRequestTimeout(10000).setMaxRedirects(1);
+            requestConfigBuilder.setConnectionRequestTimeout(3000).setMaxRedirects(1);
             // 2. make POST request to the given URL
             HttpPost httpPost = new HttpPost(BASE_URL + "/" + ENTITY);
             httpPost.setConfig(requestConfigBuilder.build());
@@ -115,7 +126,6 @@ public class UserWSAdapter {
             // Insert user.
             JSONArray jsonArray = new JSONArray(result);
             jsonToUser(jsonArray);
-            UserWSAdapter userWSAdapter = new UserWSAdapter();
             UserSqlLiteAdapter userSqlLiteAdapter = new UserSqlLiteAdapter(context);
             userSqlLiteAdapter.open();
 

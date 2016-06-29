@@ -25,7 +25,7 @@ public class QcmWSAdapter {
     /**
      * Api Base Url
      */
-    private static final String BASE_URL = "http://192.168.1.39/app_dev.php/api";
+    private static final String BASE_URL = "https://192.168.100.212/qcm2/web/app_dev.php/api";
     /**
      * Api qcm URL
      */
@@ -41,7 +41,7 @@ public class QcmWSAdapter {
     /**
      * Library AsyncHttpClient
      */
-    private static AsyncHttpClient client = new AsyncHttpClient();
+    private static AsyncHttpClient client = new AsyncHttpClient(true,80,443);
     /**
      * Qcm id
      */

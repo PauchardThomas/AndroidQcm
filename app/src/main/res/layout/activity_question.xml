@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="@color/grey">
 
 <LinearLayout
     android:layout_width="fill_parent"
@@ -16,7 +17,8 @@
         android:text="@string/tvUsername"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_weight="0.44"
-        android:id="@+id/tvUsername" />
+        android:id="@+id/tvUsername"
+        android:textColor="@color/green"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,7 +26,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/tvCategory"
         android:layout_weight="0.41"
-        android:id="@+id/tvCategory" />
+        android:id="@+id/tvCategory"
+        android:textColor="@color/green"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -32,7 +35,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/tvQcm"
         android:layout_weight="0.20"
-        android:id="@+id/tvQcm" />
+        android:id="@+id/tvQcm"
+        android:textColor="@color/green"/>
 
 </LinearLayout>
 

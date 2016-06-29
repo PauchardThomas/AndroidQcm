@@ -281,7 +281,7 @@ public class QuestionActivity extends Activity {
     /**
      * Adapter
      */
-    private class MyCustomAdapter extends ArrayAdapter<Proposal> {
+    private class MyCustomAdapter extends ArrayAdapter<Proposal>  {
 
         /**
          * Proposal List
@@ -393,9 +393,9 @@ public class QuestionActivity extends Activity {
                     public void onClick(View v) {
 
                         CheckBox cb = (CheckBox) v;
-                        Toast.makeText(getApplicationContext(), "Clicked on proposal " +
+                        /*Toast.makeText(getApplicationContext(), "Clicked on proposal " +
                                 cb.getId() + " |" + cb.getText() + "is " + cb.isChecked()
-                                , Toast.LENGTH_SHORT).show();
+                                , Toast.LENGTH_SHORT).show();*/
 
                         //********************//
                         //** Open database **//

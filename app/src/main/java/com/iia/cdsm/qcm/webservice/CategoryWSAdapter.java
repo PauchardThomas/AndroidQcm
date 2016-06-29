@@ -6,6 +6,7 @@ import com.iia.cdsm.qcm.Entity.Category;
 import com.iia.cdsm.qcm.Entity.User;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.MySSLSocketFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,7 +21,7 @@ public class CategoryWSAdapter {
     /**
      * Category API BASE URL
      */
-    private static final String BASE_URL = "http://192.168.1.39/app_dev.php/api";
+    private static final String BASE_URL = "https://192.168.100.212/qcm2/web/app_dev.php/api";
     /**
      * Entity API URL
      */
@@ -28,7 +29,7 @@ public class CategoryWSAdapter {
     /**
      * AsyncHttpClient
      */
-    private static AsyncHttpClient client = new AsyncHttpClient();
+    private static AsyncHttpClient client = new AsyncHttpClient(true,80,443);
     /**
      * Category ID
      */
@@ -50,6 +51,7 @@ public class CategoryWSAdapter {
      */
     public static void getAll(int id_user, AsyncHttpResponseHandler resp) {
         String url = String.format("%s/%s/%s", BASE_URL, ENTITY, id_user);
+       // client.setSSLSocketFactory(MySSLSocketFactory.getFixedSocketFactory());
         client.get(url, resp);
         client.setTimeout(3000);
     }

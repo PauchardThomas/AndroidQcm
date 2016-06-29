@@ -9,8 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.iia.cdsm.qcm.Data.UserSqlLiteAdapter;
 import com.iia.cdsm.qcm.Entity.User;
 import com.iia.cdsm.qcm.R;
+import com.iia.cdsm.qcm.Security.Hash;
 import com.iia.cdsm.qcm.webservice.UserWSAdapter;
 
 import org.json.JSONException;
@@ -60,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 User user = new User(0, null, null, 0);
                 String username = etUsername.getText().toString();
+                //String password = Hash.hashContent(etPassword.getText().toString());
                 String password = etPassword.getText().toString();
 
                 //*********************//
@@ -86,6 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                         //** Else wrong id **//
                         //*******************//
                     } else {
+
                         Toast.makeText(getBaseContext(), "Identifiants incorrects", Toast.LENGTH_LONG).show();
                     }
                 } catch (InterruptedException e) {

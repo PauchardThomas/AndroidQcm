@@ -54,7 +54,10 @@ public class ListCategoriesActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Set Content View
+        /**
+         * Set Content View
+         */
+
         setContentView(R.layout.activity_category_list);
 
         /**
@@ -70,6 +73,7 @@ public class ListCategoriesActivity extends Activity {
          * Get all Categories by user
          */
         CategoryWSAdapter.getAll(user.getIdServer(), new JsonHttpResponseHandler() {
+
             /**
              * If server response : Success
              * @param statusCode response statusCode
@@ -123,7 +127,7 @@ public class ListCategoriesActivity extends Activity {
                 categorySqlLiteAdapter.close();
 
                 //*******************************//
-                //** Add categories to liView **//
+                //** Add categories to listView **//
                 //*****************************//
                 List<Category> item = new ArrayList<>();
                 for (Category category : categories) {
@@ -142,8 +146,28 @@ public class ListCategoriesActivity extends Activity {
              * @param errorResponse errorResponse
              */
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
+
+                //*********************//
+                //** Get categories **//
+                //*******************//
+                CategorySqlLiteAdapter categorySqlLiteAdapter =
+                        new CategorySqlLiteAdapter(ListCategoriesActivity.this);
+                categorySqlLiteAdapter.open();
+                ArrayList<Category> categories = categorySqlLiteAdapter.getCategories();
+                categorySqlLiteAdapter.close();
+
+                //*******************************//
+                //** Add categories to listView **//
+                //*****************************//
+                List<Category> item = new ArrayList<>();
+                for (Category category : categories) {
+                    item.add(category);
+                }
+                ArrayAdapter<Category> adapter = new ArrayAdapter<>(ListCategoriesActivity.this,
+                        android.R.layout.simple_list_item_1, item);
+                list.setAdapter(adapter);
             }
         });
 

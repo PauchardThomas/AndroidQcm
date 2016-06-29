@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/grey">
 
     <TextView
         android:layout_width="wrap_content"
@@ -9,14 +10,22 @@
         android:hint="@string/tvQcm"
         android:id="@+id/tvQcmLibelle"
         android:layout_marginTop="118dp"
+        android:gravity="center"
+        android:textColorHint="@color/green"
+        android:textColor="@color/green"
+        android:textSize="40sp"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/tvDuree" />
+        android:layout_alignEnd="@+id/tvDureeValue" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/tvDuree"
+        android:gravity="center"
+        android:textSize="20sp"
         android:id="@+id/tvDuree"
+        android:textColor="@color/green"
+        android:textColorHint="@color/green"
         android:layout_below="@+id/tvQcmLibelle"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp" />
@@ -26,6 +35,8 @@
         android:layout_height="wrap_content"
         android:hint="@string/tvDureeValue"
         android:id="@+id/tvDureeValue"
+        android:textColor="@color/green"
+        android:textColorHint="@color/green"
         android:layout_marginTop="31dp"
         android:layout_below="@+id/tvDuree"
         android:layout_centerHorizontal="true" />
@@ -33,7 +44,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="btBegin"
+        android:text="@string/btBegin"
         android:id="@+id/btCommencer"
         android:layout_below="@+id/tvDureeValue"
         android:layout_centerHorizontal="true"

@@ -18,11 +18,27 @@ import static org.junit.Assert.assertEquals;
  */
 public class UserWSTest {
 
-    private static final String BASE_URL = "http://192.168.1.39/app_dev.php/api";
+    /**
+     * Base URL
+     */
+    private static final String BASE_URL = "http://192.168.100.152/app_dev.php/api";
+    /**
+     * Entity URL
+     */
     private static final String ENTITY = "users";
+    /**
+     * USER URL
+     */
     private static final int ID_USER = 1;
+    /**
+     * Response expected
+     */
     private static final String RESPONSE = "HTTP/1.1 200 OK";
 
+    /**
+     * Test if webservice return a response 200 (OK)
+     * @throws IOException
+     */
     @Test
     public void UserWSTest() throws IOException {
 
@@ -34,6 +50,5 @@ public class UserWSTest {
         HttpResponse httpResponse = httpclient.execute(httpPost);
 
         assertEquals(RESPONSE,httpResponse.getStatusLine().toString());
-
     }
 }

@@ -20,6 +20,7 @@ import com.iia.cdsm.qcm.R;
 import com.iia.cdsm.qcm.webservice.QcmWSAdapter;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -111,6 +112,7 @@ public class QcmActivity extends Activity {
                  * Get all informations about the qcm clicked
                  */
                 QcmWSAdapter.get(qcm.getIdServer(), new JsonHttpResponseHandler() {
+
                     /**
                      * If server response
                      * @param statusCode response StatusCode

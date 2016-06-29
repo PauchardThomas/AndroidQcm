@@ -106,8 +106,8 @@ public class CategorySqlLiteAdapter {
      */
     public long update(Category category) {
 
-        String whereClauseUpdate = COL_ID + "= ?";
-        String[] whereArgsUpdate = {String.valueOf(category.getId())};
+        String whereClauseUpdate = COL_ID_SERVER + "= ?";
+        String[] whereArgsUpdate = {String.valueOf(category.getIdServer())};
         ContentValues values = this.categoryToContentValues(category);
         return db.update(TABLE_CATEGORY, values, whereClauseUpdate, whereArgsUpdate);
 

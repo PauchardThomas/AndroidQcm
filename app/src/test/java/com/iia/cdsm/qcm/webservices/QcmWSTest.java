@@ -16,12 +16,32 @@ import static org.junit.Assert.assertEquals;
  * Created by Thom' on 26/04/2016.
  */
 public class QcmWSTest {
-    private static final String BASE_URL = "http://192.168.1.39/app_dev.php/api";
+    /**
+     * Base URL
+     */
+    private static final String BASE_URL = "http://192.168.100.152/app_dev.php/api";
+    /**
+     * Entity URL
+     */
     private static final String ENTITY = "qcm";
+    /**
+     * List URL
+     */
     private static final String ENTITY_LIST = "lists";
+    /**
+     * ID URL
+     */
     private static final int ID = 1;
+    /**
+     * Response expected
+     */
     private static final String RESPONSE = "HTTP/1.1 200 OK";
 
+    /**
+     * Test if webservice return a response 200 (OK)
+     *
+     * @throws IOException
+     */
     @Test
     public void QcmWSTest() throws IOException {
 
@@ -32,7 +52,7 @@ public class QcmWSTest {
 
         HttpResponse httpResponse = httpclient.execute(httpget);
 
-        assertEquals(RESPONSE,httpResponse.getStatusLine().toString());
+        assertEquals(RESPONSE, httpResponse.getStatusLine().toString());
 
     }
 }
