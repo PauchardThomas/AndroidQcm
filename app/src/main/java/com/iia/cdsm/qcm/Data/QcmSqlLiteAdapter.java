@@ -154,13 +154,37 @@ public class QcmSqlLiteAdapter {
     /**
      * Get only one Qcm
      *
-     * @param id Qcm id
+     * @param id Qcm id server
      * @return Qcm selected
      */
     public Qcm getQcm(int id) {
         String[] cols = {COL_ID, COL_LIBELLE, COL_NB_POINTS, COL_DATE_PUBLI, COL_DATE_FIN,
                 COL_CATEGORY_ID, COL_DURATION, COL_ID_SERVER};
         String whereClauses = COL_ID_SERVER + "= ?";
+        String[] whereArgs = {String.valueOf(id)};
+        Cursor c = db.query(TABLE_QCM, cols, whereClauses, whereArgs, null, null, null);
+        Qcm qcm = null;
+
+        if (c.getCount() > 0) {
+
+            qcm = new Qcm();
+            c.moveToFirst();
+            qcm = cursorToItem(c);
+        }
+        return qcm;
+
+    }
+
+    /**
+     * Get only one Qcm
+     *
+     * @param id Qcm id
+     * @return Qcm selected
+     */
+    public Qcm getQcmById(int id) {
+        String[] cols = {COL_ID, COL_LIBELLE, COL_NB_POINTS, COL_DATE_PUBLI, COL_DATE_FIN,
+                COL_CATEGORY_ID, COL_DURATION, COL_ID_SERVER};
+        String whereClauses = COL_ID + "= ?";
         String[] whereArgs = {String.valueOf(id)};
         Cursor c = db.query(TABLE_QCM, cols, whereClauses, whereArgs, null, null, null);
         Qcm qcm = null;

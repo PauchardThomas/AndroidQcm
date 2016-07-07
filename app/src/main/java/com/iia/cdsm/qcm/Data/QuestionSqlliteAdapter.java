@@ -153,6 +153,29 @@ public class QuestionSqlliteAdapter {
     }
 
     /**
+     * Get only one question
+     *
+     * @param id_server id_server
+     * @return Question selected
+     */
+    public Question getQuestionById(int id_server) {
+        String[] cols = {COL_ID, COL_LIBELLE, COL_POINTS, COL_ID_SERVER, COL_QCM_ID};
+        String whereClauses = COL_ID + "= ?";
+        String[] whereArgs = {String.valueOf(id_server)};
+        Cursor c = db.query(TABLE_QUESTION, cols, whereClauses, whereArgs, null, null, null);
+        Question question = null;
+
+        if (c.getCount() > 0) {
+
+            question = new Question();
+            c.moveToFirst();
+            question = cursorToItems(c);
+        }
+        return question;
+
+    }
+
+    /**
      * Get all questions
      *
      * @param id      id

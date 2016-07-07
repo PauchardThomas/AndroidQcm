@@ -139,6 +139,27 @@ public class UserSqlLiteAdapter {
     }
 
     /**
+     * Get only one user
+     *
+     * @param id user id
+     * @return User
+     */
+    public User getUserById(int id) {
+        String[] cols = {COL_ID, COL_USERNAME, COL_PASSWORD, COL_ID_SERVER};
+        String whereClauses = COL_ID + "= ?";
+        String[] whereArgs = {String.valueOf(id)};
+        Cursor c = db.query(TABLE_USER, cols, whereClauses, whereArgs, null, null, null);
+        User user = null;
+
+        if (c.getCount() > 0) {
+
+            c.moveToFirst();
+            user = cursorToItem(c);
+        }
+        return user;
+
+    }
+    /**
      * Convert cursor To User
      *
      * @param c cursor
