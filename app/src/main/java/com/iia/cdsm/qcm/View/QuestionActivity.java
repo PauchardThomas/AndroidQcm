@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.common.base.Utf8;
 import com.iia.cdsm.qcm.Data.ProposalUserSqLiteAdapter;
 import com.iia.cdsm.qcm.Data.QuestionSqlliteAdapter;
 import com.iia.cdsm.qcm.Entity.Category;
@@ -31,8 +32,12 @@ import com.iia.cdsm.qcm.Entity.User;
 import com.iia.cdsm.qcm.R;
 import com.iia.cdsm.qcm.webservice.QuestionWSAdapter;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.TextHttpResponseHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -212,7 +217,7 @@ public class QuestionActivity extends Activity {
                                 //** Click on YES **//
                                 //*****************//
                                 case DialogInterface.BUTTON_POSITIVE:
-                                    Toast.makeText(QuestionActivity.this, "YES", Toast.LENGTH_SHORT).show();
+                                  //  Toast.makeText(QuestionActivity.this, "YES", Toast.LENGTH_SHORT).show();
 
 
                                     //***********************//
@@ -230,18 +235,33 @@ public class QuestionActivity extends Activity {
                                     //** Send User answers to server **//
                                     //********************************//
                                     try {
-                                        QuestionWSAdapter.post(QuestionActivity.this, proposalUsers,
-                                                new AsyncHttpResponseHandler() {
-                                                    @Override
-                                                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                                        QuestionWSAdapter.post(QuestionActivity.this, proposalUsers, new TextHttpResponseHandler() {
+                                            @Override
+                                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                                int a = 1;
+                                            }
 
-                                                    }
+                                            @Override
+                                            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                                                int b = 0;
+                                            }
 
-                                                    @Override
-                                                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                                            @Override
+                                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBytes) {
+                                                super.onSuccess(statusCode, headers, responseBytes);
+                                                Toast.makeText(QuestionActivity.this, "Réponses envoyées", Toast.LENGTH_SHORT).show();
+                                                String reponse = new String(responseBytes);
+                                                String test = reponse;
+                                            }
 
-                                                    }
-                                                });
+                                            @Override
+                                            public void onFailure(int statusCode, Header[] headers, byte[] responseBytes, Throwable throwable) {
+                                                super.onFailure(statusCode, headers, responseBytes, throwable);
+                                                Toast.makeText(QuestionActivity.this, "Réponses non envoyées. Vérifier votre connexion internet.", Toast.LENGTH_SHORT).show();
+                                                String reponse = new String(responseBytes);
+                                                String test = reponse;
+                                            }
+                                        });
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     } catch (UnsupportedEncodingException e) {
@@ -260,7 +280,7 @@ public class QuestionActivity extends Activity {
                                 //** Click on NO **//
                                 //*****************//
                                 case DialogInterface.BUTTON_NEGATIVE:
-                                    Toast.makeText(QuestionActivity.this, "NO", Toast.LENGTH_SHORT).show();
+                                   // Toast.makeText(QuestionActivity.this, "NO", Toast.LENGTH_SHORT).show();
                                     //No button clicked
                                     break;
                             }

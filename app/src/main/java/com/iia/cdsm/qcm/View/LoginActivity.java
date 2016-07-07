@@ -62,8 +62,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 User user = new User(0, null, null, 0);
                 String username = etUsername.getText().toString();
-                //String password = Hash.hashContent(etPassword.getText().toString());
-                String password = etPassword.getText().toString();
+                String password = Hash.hashContent(etPassword.getText().toString());
+                //String password = etPassword.getText().toString();
 
                 //*********************//
                 //** Create Http Task //
@@ -84,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
                         Intent i = new Intent(LoginActivity.this, ListCategoriesActivity.class);
                         i.putExtra(User.SERIAL, user);
                         startActivity(i);
-
+                        finish();
                         //********************//
                         //** Else wrong id **//
                         //*******************//

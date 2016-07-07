@@ -22,8 +22,8 @@ import cz.msebera.android.httpclient.entity.StringEntity;
  */
 public class QuestionWSAdapter {
 
-    private static final String BASE_URL = "http://192.168.100.212/qcm2/web/app_dev.php/api";
-    private static final String ENTITY = "question";
+    private static final String BASE_URL = "https://192.168.100.212/qcm2/web/app_dev.php/api";
+    private static final String ENTITY = "questions";
     private static final int VERSION = 1;
     private static AsyncHttpClient client = new AsyncHttpClient(true,80,443);
 
@@ -32,7 +32,7 @@ public class QuestionWSAdapter {
                             AsyncHttpResponseHandler responseHandler)
             throws JSONException, UnsupportedEncodingException {
 
-        String url = String.format("%s/%s/",BASE_URL,ENTITY);
+        String url = String.format("%s/%s",BASE_URL,ENTITY);
         String jsonParams = ItemToJsonObject(proposalUsers);
         StringEntity entity = new StringEntity(jsonParams.toString());
         client.post(context,url,entity,"application/json",responseHandler);
@@ -43,6 +43,7 @@ public class QuestionWSAdapter {
 
 
         String json = new Gson().toJson(proposalUsers);
+
 
         return json;
     }
